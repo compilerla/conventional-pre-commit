@@ -2,6 +2,6 @@
   name: Conventional Commit
   entry: conventional-pre-commit.sh
   language: script
-  description: Checks commit message for Conventional Commit formatting
+  description: Checks commit message for Conventional Commits formatting
   always_run: true
   stages: [commit-msg]

@@ -3,9 +3,11 @@
 if ! grep -Pq '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([\w][\w -]+\))?!?: [\w][\s\S]+$' "$1"; then
     echo "[Commit message] $( cat $1 )"
     echo "
-Your commit message doesn't look like a Conventional Commit https://www.conventionalcommits.org/
+Your commit message does not follow Conventional Commits formatting
+https://www.conventionalcommits.org/
 
-Conventional Commits start with one of the below types, followed by a colon, followed by the commit message:
+Conventional Commits start with one of the below types, followed by a colon,
+followed by the commit message:
 
     build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
 

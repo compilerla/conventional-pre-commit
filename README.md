@@ -1,7 +1,7 @@
 # conventional-pre-commit
 
 A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
-[Conventional Commit](https://conventionalcommits.org) formatting.
+[Conventional Commits](https://conventionalcommits.org) formatting.
 
 ## Usage
 
@@ -46,9 +46,11 @@ Conventional Commit......................................................Failed
 
 [Commit message] add a new feature
 
-Your commit message doesn't look like a Conventional Commit https://www.conventionalcommits.org/
+Your commit message does not follow Conventional Commits formatting
+https://www.conventionalcommits.org/
 
-Conventional Commit messages start with one of the below types, followed by a colon, followed by the message:
+Conventional Commits start with one of the below types, followed by a colon,
+followed by the commit message:
 
     build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
 
