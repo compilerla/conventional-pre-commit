@@ -13,15 +13,15 @@ followed by the commit message:
 
 Example commit message adding a feature:
 
-    'feat: add great new feature'
+    feat: implement new API
 
 Example commit message fixing an issue:
 
-    'fix: remove infinite loop'
+    fix: remove infinite loop
 
 Optionally, include a scope in parentheses after the type for more context:
 
-    'fix(account): remove infinite loop'
+    fix(account): remove infinite loop
 "
     exit 1
 fi

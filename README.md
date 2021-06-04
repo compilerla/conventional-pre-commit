@@ -56,7 +56,7 @@ followed by the commit message:
 
 Example commit message adding a feature:
 
-    feat: add great new feature
+    feat: implement new API
 
 Example commit message fixing an issue:
 
