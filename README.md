@@ -25,6 +25,7 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
+        args: [] # optional: list of Conventional Commits types to allow
 ```
 
 Install the `pre-commit` script:

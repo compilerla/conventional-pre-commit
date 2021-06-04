@@ -1,7 +1,37 @@
 #!/usr/bin/env bash
 
-if ! grep -Pq '^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([\w][\w -]+\))?!?: [\w][\s\S]+$' "$1"; then
-    echo "[Commit message] $( cat $1 )"
+# list of Conventional Commits types
+cc_types="feat fix"
+default_types="build chore ci docs $cc_types perf refactor revert style test"
+types=( $cc_types )
+
+if [ $# -eq 1 ]; then
+    types=( $default_types )
+else
+    # assume all args but the last are types
+    while [ $# -gt 1 ]; do
+        types+=( $1 )
+        shift
+    done
+fi
+
+# the commit message file is the last remaining arg
+msg_file=$1
+
+# join types with | to form regex ORs
+r_types="($(IFS='|'; echo "${types[*]}"))"
+# optional scope
+r_scope="(\([\w][\w -]+\))?"
+# optional breaking change indicator and colon delimiter
+r_delim='!?:'
+# subject line, body, footer
+r_subject=" [\w][\s\S]+"
+# the full regex pattern
+pattern="^$r_types$r_scope$r_delim$r_subject$"
+
+# check commit message
+if ! grep -Pq "$pattern" "$msg_file"; then
+    echo "[Commit message] $( cat $msg_file )"
     echo "
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
@@ -9,7 +39,7 @@ https://www.conventionalcommits.org/
 Conventional Commits start with one of the below types, followed by a colon,
 followed by the commit message:
 
-    build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
+    $(IFS=' '; echo "${types[*]}")
 
 Example commit message adding a feature:
 
