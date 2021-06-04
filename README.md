@@ -53,7 +53,7 @@ https://www.conventionalcommits.org/
 Conventional Commits start with one of the below types, followed by a colon,
 followed by the commit message:
 
-    build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
+    build chore ci docs feat fix perf refactor revert style test
 
 Example commit message adding a feature:
 
