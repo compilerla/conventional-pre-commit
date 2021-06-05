@@ -20,8 +20,8 @@ msg_file=$1
 
 # join types with | to form regex ORs
 r_types="($(IFS='|'; echo "${types[*]}"))"
-# optional scope
-r_scope="(\([\w][\w -]+\))?"
+# optional (scope)
+r_scope="(\([\w \/-]+\))?"
 # optional breaking change indicator and colon delimiter
 r_delim='!?:'
 # subject line, body, footer
