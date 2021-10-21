@@ -28,9 +28,16 @@ r_delim='!?:'
 r_subject=" [\w][\s\S]+"
 # the full regex pattern
 pattern="^$r_types$r_scope$r_delim$r_subject$"
+# Fixup/squash/amend pattern
+built_in_pattern="^(amend|fixup|squash)!$r_subject$"
 
-# check commit message
+# Check if commit is conventional commit
 if grep -Pq "$pattern" "$msg_file"; then
+    exit 0
+fi
+
+# Check if commit is built-in type
+if grep -Pq "$built_in_pattern" "$msg_file"; then
     exit 0
 fi
 
