@@ -30,9 +30,12 @@ r_subject=" [\w][\s\S]+"
 pattern="^$r_types$r_scope$r_delim$r_subject$"
 
 # check commit message
-if ! grep -Pq "$pattern" "$msg_file"; then
-    echo "[Commit message] $( cat $msg_file )"
-    echo "
+if grep -Pq "$pattern" "$msg_file"; then
+    exit 0
+fi
+
+echo "[Commit message] $( cat $msg_file )"
+echo "
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
 
@@ -53,5 +56,4 @@ Optionally, include a scope in parentheses after the type for more context:
 
     fix(account): remove infinite loop
 "
-    exit 1
-fi
+exit 1
