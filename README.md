@@ -79,6 +79,13 @@ Conventional Commit......................................................Passed
 - duration: 0.05s
 ```
 
+## Versioning
+
+Versioning generally follows [Semantic Versioning](https://semver.org/).
+
+In addition to the strict version tag, we also maintain a "latest" tag for each
+major version, e.g. `v1` always points to the latest `v1.x.x` tag.
+
 ## License
 
 [Apache 2.0](LICENSE)
