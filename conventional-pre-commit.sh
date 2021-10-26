@@ -21,18 +21,21 @@ msg_file=$1
 # join types with | to form regex ORs
 r_types="($(IFS='|'; echo "${types[*]}"))"
 # optional (scope)
-r_scope="(\([\w \/-]+\))?"
+r_scope="(\([[:alnum:] \/-]+\))?"
 # optional breaking change indicator and colon delimiter
 r_delim='!?:'
 # subject line, body, footer
-r_subject=" [\w][\s\S]+"
+r_subject=" [[:alnum:]].+"
 # the full regex pattern
 pattern="^$r_types$r_scope$r_delim$r_subject$"
 
-# check commit message
-if ! grep -Pq "$pattern" "$msg_file"; then
-    echo "[Commit message] $( cat $msg_file )"
-    echo "
+# Check if commit is conventional commit
+if grep -Eq "$pattern" "$msg_file"; then
+    exit 0
+fi
+
+echo "[Commit message] $( cat $msg_file )"
+echo "
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
 
@@ -53,5 +56,4 @@ Optionally, include a scope in parentheses after the type for more context:
 
     fix(account): remove infinite loop
 "
-    exit 1
-fi
+exit 1
