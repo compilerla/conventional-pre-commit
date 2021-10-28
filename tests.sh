@@ -13,6 +13,11 @@ setup () {
     cd "$test_dir"
 
     git init
+
+    git branch -m main
+    git config user.email "conventional-pre-commit@compiler.la"
+    git config user.name "conventional-pre-commit"
+
     pre-commit install --hook-type commit-msg
     git add .
 }
