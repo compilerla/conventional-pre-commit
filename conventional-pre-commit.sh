@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 
 # list of Conventional Commits types
-cc_types="feat fix"
-default_types="build chore ci docs $cc_types perf refactor revert style test"
-types=( $cc_types )
+cc_types=("feat" "fix")
+default_types=("build" "chore" "ci" "docs" "${cc_types[@]}" "perf" "refactor" "revert" "style" "test")
+types=( "${cc_types[@]}" )
 
 if [ $# -eq 1 ]; then
-    types=( $default_types )
+    types=( "${default_types[@]}" )
 else
     # assume all args but the last are types
     while [ $# -gt 1 ]; do
-        types+=( $1 )
+        types+=( "$1" )
         shift
     done
 fi
 
 # the commit message file is the last remaining arg
-msg_file=$1
+msg_file="$1"
 
 # join types with | to form regex ORs
 r_types="($(IFS='|'; echo "${types[*]}"))"
@@ -34,7 +34,7 @@ if grep -Eq "$pattern" "$msg_file"; then
     exit 0
 fi
 
-echo "[Commit message] $( cat $msg_file )"
+echo "[Commit message] $( cat "$msg_file" )"
 echo "
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
