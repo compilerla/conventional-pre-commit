@@ -1,5 +1,7 @@
 require("dotenv").config();
 
+const fs = require("fs");
+
 const octokit = require("@octokit/core");
 const client = new octokit.Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -32,4 +34,20 @@ async function searchHookUsage() {
         console.log(error);
         return {};
     }
+}
+
+function updateReadme(repos, owners) {
+    console.log("Updating README");
+
+    const path = "../../../README.md";
+    const current = fs.readFileSync(path, "utf-8");
+
+    const pattern = /<!\-\- github_stats starts \-\->.*<!\-\- github_stats ends \-\->/s
+    const stats = `:octocat: **${repos} public repos** across :woman_technologist: :man_technologist: **${owners} users/orgs** on GitHub use this hook!`;
+    const content = `<!-- github_stats starts -->\n${stats}\n<!-- github_stats ends -->`;
+
+    const updated = current.replace(pattern, content);
+    fs.writeFileSync(path, updated, "utf-8");
+
+    console.log("Finished updating README");
 }
