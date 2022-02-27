@@ -17,6 +17,10 @@ jobs:
           cache: npm
           cache-dependency-path: .github/workflows/github-stats/package-lock.json
 
+      - name: Install packages
+        working-directory: .github/workflows/github-stats
+        run: npm install
+
       - name: Run update script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
