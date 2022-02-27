@@ -15,18 +15,22 @@ jobs:
         with:
           node-version: 16
           cache: npm
-          cache-dependency-path: .github/workflows/update-stats/package-lock.json
+          cache-dependency-path: .github/workflows/github-stats/package-lock.json
+
+      - name: Install packages
+        working-directory: .github/workflows/github-stats
+        run: npm install
 
       - name: Run update script
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: .github/workflows/update-stats
+        working-directory: .github/workflows/github-stats
         run: npm start
 
       - name: Commit and push changes
         run: |-
           git diff
-          git config --global user.email "bot@compiler.la"
-          git config --global user.name "Compiler Bot"
+          git config --global user.email "actions@github.com"
+          git config --global user.name "Compiler GitHub Actions"
           git diff --quiet || (git add README.md && git commit -m "chore(README): update stats")
           git push
