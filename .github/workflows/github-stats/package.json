@@ -1,0 +1,24 @@
+{
+  "name": "conventional-pre-commit-github-stats",
+  "version": "1.0.0",
+  "description": "Query GitHub's REST API, update this repo's README.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/compilerla/conventional-pre-commit.git"
+  },
+  "author": "Compiler LLC",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/compilerla/conventional-pre-commit/issues"
+  },
+  "homepage": "https://github.com/compilerla/conventional-pre-commit#readme",
+  "dependencies": {
+    "@octokit/core": "^3.5.1",
+    "dotenv": "^16.0.0",
+    "octokit": "^1.7.1"
+  }
+}

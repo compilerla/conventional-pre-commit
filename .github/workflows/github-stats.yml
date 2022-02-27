@@ -1,0 +1,32 @@
+name: Update GitHub stats
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "28 * * * *"
+
+jobs:
+  github-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: .github/workflows/update-stats/package-lock.json
+
+      - name: Run update script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: .github/workflows/update-stats
+        run: npm start
+
+      - name: Commit and push changes
+        run: |-
+          git diff
+          git config --global user.email "bot@compiler.la"
+          git config --global user.name "Compiler Bot"
+          git diff --quiet || (git add README.md && git commit -m "chore(README): update stats")
+          git push
