@@ -51,3 +51,11 @@ function updateReadme(repos, owners) {
 
     console.log("Finished updating README");
 }
+
+searchHookUsage().then((data) => {
+    const hookRefs = data.items.filter(d => d.name == ".pre-commit-config.yaml");
+    const repos = new Set(hookRefs.map(d => d.repository.full_name));
+    const owners = new Set(hookRefs.map(d => d.repository.owner.login));
+
+    updateReadme(repos.size, owners.size);
+});
