@@ -3,7 +3,7 @@ name: Update GitHub stats
 on:
   workflow_dispatch:
   schedule:
-    - cron: "28 * * * *"
+    - cron: "28 */6 * * *"
 
 jobs:
   github-stats:
