@@ -4,7 +4,7 @@ A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
 [Conventional Commits](https://conventionalcommits.org) formatting.
 
 <!-- github_stats starts -->
-:octocat: **61 public repos** across :woman_technologist: :man_technologist: **42 users/orgs** on GitHub use this hook!
+:octocat: **58 public repos** across :woman_technologist: :man_technologist: **42 users/orgs** on GitHub use this hook!
 <!-- github_stats ends -->
 
 ## Usage
