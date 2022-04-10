@@ -25,7 +25,7 @@ r_scope="(\([[:alnum:] \/-]+\))?"
 # optional breaking change indicator and colon delimiter
 r_delim='!?:'
 # subject line, body, footer
-r_subject=" [[:alnum:]].+"
+r_subject=" [[:print:]].+"
 # the full regex pattern
 pattern="^$r_types$r_scope$r_delim$r_subject$"
 
