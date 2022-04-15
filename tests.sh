@@ -27,7 +27,7 @@ teardown () {
     rm -rf "$test_dir"
 }
 
-# test a failure
+echo "test a failure"
 
 setup
 
@@ -39,7 +39,7 @@ echo "$fail" | grep -Eq "Your commit message does not follow Conventional Commit
 
 (( result += "$?" ))
 
-# test a success
+echo "test a success"
 
 setup
 
@@ -48,6 +48,56 @@ pass="$(git commit -m 'test: conventional-pre-commit')"
 teardown
 
 echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventional-pre-commit"
+
+(( result += "$?" ))
+
+echo "test printable characters/marks in subject"
+
+echo "test escaped double quote \""
+
+setup
+
+pass="$(git commit -m 'test: conventional-pre-commit \"')"
+
+teardown
+
+echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventional-pre-commit \""
+
+(( result += "$?" ))
+
+echo "test backtick \`"
+
+setup
+
+pass="$(git commit -m 'test: conventional-pre-commit \`')"
+
+teardown
+
+echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventional-pre-commit \`"
+
+(( result += "$?" ))
+
+echo "test hash/number sign #"
+
+setup
+
+pass="$(git commit -m 'test: conventional-pre-commit #')"
+
+teardown
+
+echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventional-pre-commit #"
+
+(( result += "$?" ))
+
+echo "test ampersand &"
+
+setup
+
+pass="$(git commit -m 'test: conventional-pre-commit &')"
+
+teardown
+
+echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventional-pre-commit &"
 
 (( result += "$?" ))
 
