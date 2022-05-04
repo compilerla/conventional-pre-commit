@@ -30,6 +30,11 @@ r_subject=" [[:print:]].+"
 pattern="^$r_types$r_scope$r_delim$r_subject$"
 
 # Check if commit is conventional commit
+if grep -Eq "^Merge.+into.+" "$msg_file"; then
+    exit 0
+fi
+
+# Check if commit is conventional commit
 if grep -Eq "$pattern" "$msg_file"; then
     exit 0
 fi

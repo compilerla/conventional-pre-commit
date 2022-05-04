@@ -12,13 +12,13 @@ setup () {
 
     cd "$test_dir"
 
-    git init
+    git init > /dev/null
 
     git branch -m main
     git config user.email "conventional-pre-commit@compiler.la"
     git config user.name "conventional-pre-commit"
 
-    pre-commit install --hook-type commit-msg
+    pre-commit install --hook-type commit-msg > /dev/null
     git add .
 }
 
@@ -50,6 +50,20 @@ pass="$(git commit -m 'test: conventional-pre-commit')"
 teardown
 
 echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventional-pre-commit"
+
+(( result += "$?" ))
+
+echo "$result"
+
+echo "test merge message"
+
+setup
+
+pass="$(git commit -m 'Merge origin/master into local')"
+
+teardown
+
+echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] Merge origin/master into local"
 
 (( result += "$?" ))
 
