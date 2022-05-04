@@ -29,7 +29,7 @@ r_subject=" [[:print:]].+"
 # the full regex pattern
 pattern="^$r_types$r_scope$r_delim$r_subject$"
 
-# Check if commit is conventional commit
+# Support default "Merge" commit message
 if grep -Eq "^Merge.+into.+" "$msg_file"; then
     exit 0
 fi
