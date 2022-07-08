@@ -1,5 +1,30 @@
 #!/usr/bin/env bash
 
+# Define Color Codes
+RESTORE='\033[0m'
+RED='\033[00;31m'
+GREEN='\033[00;32m'
+YELLOW='\033[00;33m'
+BLUE='\033[00;34m'
+PURPLE='\033[00;35m'
+CYAN='\033[00;36m'
+LIGHTGRAY='\033[00;37m'
+
+LRED='\033[01;31m'
+LGREEN='\033[01;32m'
+LYELLOW='\033[01;33m'
+LBLUE='\033[01;34m'
+LPURPLE='\033[01;35m'
+LCYAN='\033[01;36m'
+WHITE='\033[01;37m'
+
+function test_colors(){
+
+  echo -e "${GREEN}Hello ${CYAN}THERE${RESTORE} Restored here ${LCYAN}HELLO again ${RED} Red socks aren't sexy ${BLUE} neither are blue ${RESTORE} "
+
+}
+
+
 # list of Conventional Commits types
 cc_types=("feat" "fix")
 default_types=("build" "chore" "ci" "docs" "${cc_types[@]}" "perf" "refactor" "revert" "style" "test")
@@ -34,25 +59,25 @@ if grep -Eq "$pattern" "$msg_file"; then
     exit 0
 fi
 
-echo "[Commit message] $( cat "$msg_file" )"
-echo "
+echo -e "${LRED}[Bad Commit message] >> ${RESTORE} \"$( cat "$msg_file" )\""
+echo -e "${YELLOW}
 Your commit message does not follow Conventional Commits formatting
-https://www.conventionalcommits.org/
+${LBLUE}https://www.conventionalcommits.org/${YELLOW}
 
 Conventional Commits start with one of the below types, followed by a colon,
-followed by the commit message:
+followed by the commit message:${RESTORE}
 
     $(IFS=' '; echo "${types[*]}")
 
-Example commit message adding a feature:
+${YELLOW}Example commit message adding a feature:${RESTORE}
 
     feat: implement new API
 
-Example commit message fixing an issue:
+${YELLOW}Example commit message fixing an issue:${RESTORE}
 
     fix: remove infinite loop
 
-Optionally, include a scope in parentheses after the type for more context:
+${YELLOW}Optionally, include a scope in parentheses after the type for more context:{$RESTORE}
 
     fix(account): remove infinite loop
 "
