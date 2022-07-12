@@ -71,7 +71,7 @@ ${YELLOW}Example commit message fixing an issue:${RESTORE}
 
     fix: remove infinite loop
 
-${YELLOW}Optionally, include a scope in parentheses after the type for more context:{$RESTORE}
+${YELLOW}Optionally, include a scope in parentheses after the type for more context:${RESTORE}
 
     fix(account): remove infinite loop
 "
