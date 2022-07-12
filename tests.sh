@@ -113,4 +113,18 @@ echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test: conventio
 
 echo "$result"
 
+echo "test underscore in scope"
+
+setup
+
+pass="$(git commit -m 'test(some_component): conventional-pre-commit')"
+
+teardown
+
+echo "$pass" | grep -Eq "\[main \(root-commit\) [[:alnum:]]{7}\] test\(some_component\): conventional-pre-commit"
+
+(( result += "$?" ))
+
+echo "$result"
+
 exit "$result"

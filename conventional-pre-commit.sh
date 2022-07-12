@@ -21,7 +21,7 @@ msg_file="$1"
 # join types with | to form regex ORs
 r_types="($(IFS='|'; echo "${types[*]}"))"
 # optional (scope)
-r_scope="(\([[:alnum:] \/-]+\))?"
+r_scope="(\([[:alnum:] \/-_]+\))?"
 # optional breaking change indicator and colon delimiter
 r_delim='!?:'
 # subject line, body, footer
