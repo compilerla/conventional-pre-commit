@@ -18,12 +18,6 @@ LPURPLE='\033[01;35m'
 LCYAN='\033[01;36m'
 WHITE='\033[01;37m'
 
-function test_colors(){
-
-  echo -e "${GREEN}Hello ${CYAN}THERE${RESTORE} Restored here ${LCYAN}HELLO again ${RED} Red socks aren't sexy ${BLUE} neither are blue ${RESTORE} "
-
-}
-
 
 # list of Conventional Commits types
 cc_types=("feat" "fix")
