@@ -2,8 +2,10 @@
 
 # Define Color Codes
 RESTORE='\033[0m'
+BLUE='\033[00;34m'
 YELLOW='\033[00;33m'
 LRED='\033[01;31m'
+
 
 
 # list of Conventional Commits types
