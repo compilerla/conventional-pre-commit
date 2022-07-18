@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
 # Define Color Codes
-RESTORE='\033[0m'
-BLUE='\033[00;34m'
-YELLOW='\033[00;33m'
+LBLUE='\033[00;34m'
 LRED='\033[01;31m'
-
-
+RESTORE='\033[0m'
+YELLOW='\033[00;33m'
 
 # list of Conventional Commits types
 cc_types=("feat" "fix")
