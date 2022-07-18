@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Define Color Codes
+LBLUE='\033[00;34m'
+LRED='\033[01;31m'
+RESTORE='\033[0m'
+YELLOW='\033[00;33m'
+
 # list of Conventional Commits types
 cc_types=("feat" "fix")
 default_types=("build" "chore" "ci" "docs" "${cc_types[@]}" "perf" "refactor" "revert" "style" "test")
@@ -34,25 +40,25 @@ if grep -Eq "$pattern" "$msg_file"; then
     exit 0
 fi
 
-echo "[Commit message] $( cat "$msg_file" )"
-echo "
+echo -e "${LRED}[Bad Commit message] >> ${RESTORE} \"$( cat "$msg_file" )\""
+echo -e "${YELLOW}
 Your commit message does not follow Conventional Commits formatting
-https://www.conventionalcommits.org/
+${LBLUE}https://www.conventionalcommits.org/${YELLOW}
 
 Conventional Commits start with one of the below types, followed by a colon,
-followed by the commit message:
+followed by the commit message:${RESTORE}
 
     $(IFS=' '; echo "${types[*]}")
 
-Example commit message adding a feature:
+${YELLOW}Example commit message adding a feature:${RESTORE}
 
     feat: implement new API
 
-Example commit message fixing an issue:
+${YELLOW}Example commit message fixing an issue:${RESTORE}
 
     fix: remove infinite loop
 
-Optionally, include a scope in parentheses after the type for more context:
+${YELLOW}Optionally, include a scope in parentheses after the type for more context:${RESTORE}
 
     fix(account): remove infinite loop
 "
