@@ -14,11 +14,20 @@ class Colors:
     YELLOW = "\033[00;33m"
 
 
-def main(argv):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("types", nargs="*", default=format.DEFAULT_TYPES)
-    parser.add_argument("input")
-    args = parser.parse_args(argv)
+def main(argv=[]):
+    parser = argparse.ArgumentParser(
+        prog="conventional-pre-commit", description="Check a git commit message for Conventional Commits formatting."
+    )
+    parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
+    parser.add_argument("input", type=str, help="A file containing a git commit message")
+
+    if len(argv) < 1:
+        argv = sys.argv[1:]
+
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit:
+        return RESULT_FAIL
 
     with open(args.input) as f:
         message = f.read()
@@ -53,5 +62,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    argv = sys.argv[1:]
-    raise SystemExit(main(argv))
+    raise SystemExit(main())
