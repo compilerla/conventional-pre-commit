@@ -1,0 +1,12 @@
+name: compilerla/conventional-pre-commit
+
+services:
+  dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    entrypoint: []
+    command: sleep infinity
+    image: compilerla/conventional-pre-commit:dev
+    volumes:
+      - ../:/home/compiler/src
