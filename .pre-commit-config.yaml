@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: conventional-pre-commit
         name: Conventional Commit (local)
-        entry: conventional-pre-commit.sh
-        language: script
+        entry: conventional-pre-commit
+        language: python
         stages: [commit-msg]
