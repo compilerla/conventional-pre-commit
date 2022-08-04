@@ -81,7 +81,7 @@ Conventional Commit......................................................Passed
 
 ## Install with pip
 
-`conventional-pre-commit` can also be installed as used from the command line or in your Python project:
+`conventional-pre-commit` can also be installed and used from the command line:
 
 ```shell
 pip install conventional-pre-commit
