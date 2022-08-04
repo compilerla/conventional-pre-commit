@@ -29,6 +29,9 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_TEST_API_TOKEN }}
+          print_hash: true
+          skip_existing: true
+          verbose: true
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1.5
@@ -36,3 +39,4 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
+          print_hash: true
