@@ -15,12 +15,12 @@ USER $USER
 ENV PATH "$PATH:/home/$USER/.local/bin"
 
 # update pip
-RUN python -m pip install --upgrade pip && \
-    pip install black flake8 pre-commit
+RUN python -m pip install --upgrade pip
 
 # enter src directory
 WORKDIR /home/$USER/src
 
 # copy and install packages
 COPY . .
+RUN pip install -r .devcontainer/requirements.txt
 RUN pip install -r tests/requirements.txt
