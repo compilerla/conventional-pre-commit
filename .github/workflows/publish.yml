@@ -1,0 +1,38 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    if: "startsWith(github.event.release.tag_name, 'v')"
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version-file: .github/workflows/.python-version
+
+      - name: Install build dependencies
+        run: pip install build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish to Test PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1.5
+        if: "github.event.release.prerelease"
+        with:
+          username: __token__
+          password: ${{ secrets.PYPI_TEST_API_TOKEN }}
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1.5
+        if: "!github.event.release.prerelease"
+        with:
+          username: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}

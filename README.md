@@ -25,7 +25,7 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [] # optional: list of Conventional Commits types to allow
+        args: [] # optional: list of Conventional Commits types to allow e.g. [feat, fix, ci, chore, test]
 ```
 
 Install the `pre-commit` script:
@@ -45,7 +45,7 @@ Conventional Commit......................................................Failed
 - duration: 0.07s
 - exit code: 1
 
-[Commit message] add a new feature
+[Bad Commit message] >> add a new feature
 
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
@@ -79,9 +79,63 @@ Conventional Commit......................................................Passed
 - duration: 0.05s
 ```
 
+## Install with pip
+
+`conventional-pre-commit` can also be installed as used from the command line or in your Python project:
+
+```shell
+pip install conventional-pre-commit
+```
+
+Then run the command line script:
+
+```shell
+conventional-pre-commit [types] input
+```
+
+Where `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
+
+And `input` is a file containing the commit message to check:
+
+```shell
+conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
+```
+
+Or from a Python program:
+
+```python
+from conventional_pre_commit.format import is_conventional
+
+# prints True
+print(is_conventional("feat: this is a conventional commit"))
+
+# prints False
+print(is_conventional("nope: this is not a conventional commit"))
+
+# prints True
+print(is_conventional("custom: this is a conventional commit", types=["custom"]))
+```
+
 ## Versioning
 
 Versioning generally follows [Semantic Versioning](https://semver.org/).
+
+## Development
+
+`conventional-pre-commit` comes with a [VS Code devcontainer](https://code.visualstudio.com/learn/develop-cloud/containers)
+configuration to provide a consistent development environment.
+
+With the `Remote - Containers` extension enabled, open the folder containing this repository inside Visual Studio Code.
+
+You should receive a prompt in the Visual Studio Code window; click `Reopen in Container` to run the development environment
+inside the devcontainer.
+
+If you do not receive a prompt, or when you feel like starting from a fresh environment:
+
+1. `Ctrl/Cmd+Shift+P` to bring up the command palette in Visual Studio Code
+1. Type `Remote-Containers` to filter the commands
+1. Select `Rebuild and Reopen in Container` to completely rebuild the devcontainer
+1. Select `Reopen in Container` to reopen the most recent devcontainer build
 
 ## License
 
