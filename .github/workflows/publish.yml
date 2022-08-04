@@ -27,12 +27,12 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1.5
         if: "github.event.release.prerelease"
         with:
-          username: __token__
+          user: __token__
           password: ${{ secrets.PYPI_TEST_API_TOKEN }}
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1.5
         if: "!github.event.release.prerelease"
         with:
-          username: __token__
+          user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
