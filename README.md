@@ -79,6 +79,43 @@ Conventional Commit......................................................Passed
 - duration: 0.05s
 ```
 
+## Install with pip
+
+`conventional-pre-commit` can also be installed as used from the command line or in your Python project:
+
+```shell
+pip install conventional-pre-commit
+```
+
+Then run the command line script:
+
+```shell
+conventional-pre-commit [types] input
+```
+
+Where `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
+
+And `input` is a file containing the commit message to check:
+
+```shell
+conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
+```
+
+Or from a Python program:
+
+```python
+from conventional_pre_commit.format import is_conventional
+
+# prints True
+print(is_conventional("feat: this is a conventional commit"))
+
+# prints False
+print(is_conventional("nope: this is not a conventional commit"))
+
+# prints True
+print(is_conventional("custom: this is a conventional commit", types=["custom"]))
+```
+
 ## Versioning
 
 Versioning generally follows [Semantic Versioning](https://semver.org/).
