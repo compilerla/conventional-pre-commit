@@ -1,3 +1,7 @@
+ci:
+  autofix_commit_msg: "chore(pre-commit): autofix run"
+  autoupdate_commit_msg: "chore(pre-commit): autoupdate hooks"
+
 default_install_hook_types:
   - pre-commit
   - commit-msg
