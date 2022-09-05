@@ -54,7 +54,7 @@ function updateReadme(repos, owners) {
 
 searchHookUsage().then((data) => {
   const hookRefs = data.items.filter(
-    (d) => d.name == ".pre-commit-config.yaml"
+    (d) => d.name == ".pre-commit-config.yaml",
   );
   const repos = new Set(hookRefs.map((d) => d.repository.full_name));
   const owners = new Set(hookRefs.map((d) => d.repository.owner.login));
