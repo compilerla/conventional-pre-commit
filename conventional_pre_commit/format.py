@@ -23,7 +23,7 @@ def r_types(types):
 
 def r_scope():
     """Regex str for an optional (scope)."""
-    return r"(\([\w \/-]+\))?"
+    return r"(\([\w \/-:]+\))?"
 
 
 def r_delim():
