@@ -88,7 +88,7 @@ Conventional Commit......................................................Passed
 args: [--encoding=<encoding>]
 ```
 
-or 
+or
 
 ```yaml
 args: [--encoding=<encoding>, feat, ...(other custom types)]

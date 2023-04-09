@@ -41,7 +41,7 @@ def main(argv=[]):
 {Colors.YELLOW}It looks like we couldn't decode your commit message using the encoding you or your system specified.
 You can specify an encoding using the --encoding flag.{Colors.RESTORE}
 
-For example, if your commit message is encoded in {Colors.YELLOW}UTF-8{Colors.RESTORE}, 
+For example, if your commit message is encoded in {Colors.YELLOW}UTF-8{Colors.RESTORE},
 you can add this to your .pre-commit-config.yaml file:
 
   - repo: https://github.com/compilerla/conventional-pre-commit

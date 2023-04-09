@@ -105,4 +105,3 @@ def test_main_fail__conventional_gbk(conventional_gbk_commit_path):
     result = main(["--encoding=utf-8", conventional_gbk_commit_path])
 
     assert result == RESULT_FAIL
-
