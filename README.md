@@ -26,6 +26,7 @@ repos:
       - id: conventional-pre-commit
         stages: [commit-msg]
         args: [] # optional: list of Conventional Commits types to allow e.g. [feat, fix, ci, chore, test]
+                 # if you want to set encoding, use --encoding=<encoding>, before types
 ```
 
 Install the `pre-commit` script:
@@ -79,6 +80,22 @@ Conventional Commit......................................................Passed
 - duration: 0.05s
 ```
 
+### Configure encoding
+
+**For Windows user**, if you want to use `conventional-pre-commit` with non-ascii characters, you can set encoding with `--encoding=<encoding>`.
+
+```yaml
+args: [--encoding=<encoding>]
+```
+
+or
+
+```yaml
+args: [--encoding=<encoding>, feat, ...(other custom types)]
+```
+
+**The encoding argument must be in front of types.**
+
 ## Install with pip
 
 `conventional-pre-commit` can also be installed and used from the command line:
@@ -90,15 +107,17 @@ pip install conventional-pre-commit
 Then run the command line script:
 
 ```shell
-conventional-pre-commit [types] input
+conventional-pre-commit [--encoding] [types] input
 ```
 
-Where `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
+- `--encoding` is an optional encoding to use (e.g. `--encoding=utf-8`)
 
-And `input` is a file containing the commit message to check:
+- `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
+
+- `input` is a file containing the commit message to check:
 
 ```shell
-conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG
+conventional-pre-commit --encoding=utf-8 feat fix chore ci test .git/COMMIT_MSG
 ```
 
 Or from a Python program:

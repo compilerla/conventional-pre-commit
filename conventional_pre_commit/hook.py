@@ -18,6 +18,7 @@ def main(argv=[]):
     parser = argparse.ArgumentParser(
         prog="conventional-pre-commit", description="Check a git commit message for Conventional Commits formatting."
     )
+    parser.add_argument("--encoding", type=str, default=None, help="Optional encoding to use when reading the commit message")
     parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
     parser.add_argument("input", type=str, help="A file containing a git commit message")
 
@@ -29,8 +30,29 @@ def main(argv=[]):
     except SystemExit:
         return RESULT_FAIL
 
-    with open(args.input) as f:
-        message = f.read()
+    try:
+        with open(args.input, encoding=args.encoding) as f:
+            message = f.read()
+    except UnicodeDecodeError:
+        print(
+            f"""
+{Colors.LRED}[Bad Commit message encoding] {Colors.RESTORE}
+
+{Colors.YELLOW}It looks like we couldn't decode your commit message using the encoding you or your system specified.
+You can specify an encoding using the --encoding flag.{Colors.RESTORE}
+
+For example, if your commit message is encoded in {Colors.YELLOW}UTF-8{Colors.RESTORE},
+you can add this to your .pre-commit-config.yaml file:
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: xxx
+    hooks:
+      - id: conventional-pre-commit
+        stages: [ commit-msg ]
+        args: [ {Colors.YELLOW}--encoding=utf-8, {Colors.RESTORE}custom-types, ... ]
+        """
+        )
+        return RESULT_FAIL
 
     if format.is_conventional(message, args.types):
         return RESULT_SUCCESS

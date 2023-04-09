@@ -80,3 +80,28 @@ def test_subprocess_success__custom_conventional(cmd, conventional_commit_path):
     result = subprocess.call((cmd, "custom", conventional_commit_path))
 
     assert result == RESULT_SUCCESS
+
+
+def test_main_success__conventional_utf8(conventional_utf8_commit_path):
+    result = main(["--encoding=utf-8", conventional_utf8_commit_path])
+
+    assert result == RESULT_SUCCESS
+
+
+@pytest.mark.skip(reason="read utf-8 file with gbk encoding will cause mojibake instead of raising UnicodeDecodeError")
+def test_main_fail__conventional_utf8(conventional_utf8_commit_path):
+    result = main(["--encoding=gbk", conventional_utf8_commit_path])
+
+    assert result == RESULT_FAIL
+
+
+def test_main_success__conventional_gbk(conventional_gbk_commit_path):
+    result = main(["--encoding=gbk", conventional_gbk_commit_path])
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_fail__conventional_gbk(conventional_gbk_commit_path):
+    result = main(["--encoding=utf-8", conventional_gbk_commit_path])
+
+    assert result == RESULT_FAIL
