@@ -1,6 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "files.encoding": "utf8",
   "files.eol": "\n",
   "files.insertFinalNewline": true,
