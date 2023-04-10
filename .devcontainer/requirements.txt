@@ -1,5 +1,0 @@
-black
-build
-flake8
-pre-commit
-twine

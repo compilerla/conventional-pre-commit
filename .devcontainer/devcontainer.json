@@ -4,7 +4,7 @@
   "service": "dev",
   "runServices": ["dev"],
   "workspaceFolder": "/home/compiler/src",
-  "postAttachCommand": "pip install -e .",
+  "postCreateCommand": "pip install -e .[dev]",
   // Set *default* container specific settings.json values on container create.
   "settings": {
     "terminal.integrated.defaultProfile.linux": "bash",
@@ -16,6 +16,7 @@
   },
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
+    "bungcip.better-toml",
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
     "mhutchie.git-graph",
