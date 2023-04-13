@@ -1,5 +1,3 @@
-name: compilerla/conventional-pre-commit
-
 services:
   dev:
     build:
