@@ -115,10 +115,6 @@ print(is_conventional("nope: this is not a conventional commit"))
 print(is_conventional("custom: this is a conventional commit", types=["custom"]))
 ```
 
-## Versioning
-
-Versioning generally follows [Semantic Versioning](https://semver.org/).
-
 ## Development
 
 `conventional-pre-commit` comes with a [VS Code devcontainer](https://code.visualstudio.com/learn/develop-cloud/containers)
@@ -135,6 +131,29 @@ If you do not receive a prompt, or when you feel like starting from a fresh envi
 1. Type `Remote-Containers` to filter the commands
 1. Select `Rebuild and Reopen in Container` to completely rebuild the devcontainer
 1. Select `Reopen in Container` to reopen the most recent devcontainer build
+
+## Versioning
+
+Versioning generally follows [Semantic Versioning](https://semver.org/).
+
+## Making a release
+
+Releases to PyPI are triggered by [publishing a release on GitHub](https://github.com/compilerla/conventional-pre-commit/releases/new).
+
+1. Create a branch `chore/release`
+1. Bump the version in `pyproject.toml`
+1. PR, merge `chore/release` into `main`
+1. Tag `main` with the new version (prefixed by `v`):
+
+   ```bash
+   git fetch
+   git reset --hard origin/main
+   git tag vX.Y.Z
+   git push origin vX.Y.Z
+   ```
+
+1. Publish a pre-release to push the new package to TestPyPI
+1. Publish a regular Release to push the new package to PyPI
 
 ## License
 
