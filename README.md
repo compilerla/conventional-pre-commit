@@ -17,8 +17,7 @@ Add a new repo entry to your configuration file:
 
 ```yaml
 repos:
-
-# - repo: ...
+  # - repo: ...
 
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: <git sha or tag>
@@ -93,9 +92,9 @@ Then run the command line script:
 conventional-pre-commit [types] input
 ```
 
-Where `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
+- `[types]` is an optional list of Conventional Commit types to allow (e.g. `feat fix chore`)
 
-And `input` is a file containing the commit message to check:
+- `input` is a file containing the commit message to check:
 
 ```shell
 conventional-pre-commit feat fix chore ci test .git/COMMIT_MSG

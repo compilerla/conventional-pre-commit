@@ -29,8 +29,20 @@ def main(argv=[]):
     except SystemExit:
         return RESULT_FAIL
 
-    with open(args.input) as f:
-        message = f.read()
+    try:
+        with open(args.input, encoding="utf-8") as f:
+            message = f.read()
+    except UnicodeDecodeError:
+        print(
+            f"""
+{Colors.LRED}[Bad Commit message encoding] {Colors.RESTORE}
+
+{Colors.YELLOW}conventional-pre-commit couldn't decode your commit message.{Colors.RESTORE}
+{Colors.YELLOW}UTF-8{Colors.RESTORE} encoding is assumed, please configure git to write commit messages in UTF-8.
+See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTORE} for more.
+        """
+        )
+        return RESULT_FAIL
 
     if format.is_conventional(message, args.types):
         return RESULT_SUCCESS

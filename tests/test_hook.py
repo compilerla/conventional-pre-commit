@@ -80,3 +80,15 @@ def test_subprocess_success__custom_conventional(cmd, conventional_commit_path):
     result = subprocess.call((cmd, "custom", conventional_commit_path))
 
     assert result == RESULT_SUCCESS
+
+
+def test_main_success__conventional_utf8(conventional_utf8_commit_path):
+    result = main([conventional_utf8_commit_path])
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_fail__conventional_gbk(conventional_gbk_commit_path):
+    result = main([conventional_gbk_commit_path])
+
+    assert result == RESULT_FAIL
