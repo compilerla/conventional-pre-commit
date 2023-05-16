@@ -4,7 +4,6 @@ import pytest
 
 from conventional_pre_commit import format
 
-
 CUSTOM_TYPES = ["one", "two"]
 
 
@@ -21,6 +20,14 @@ def test_r_scope__optional():
     regex = re.compile(result)
 
     assert regex.match("")
+
+
+def test_r_scope__not_optional():
+    result = format.r_scope(optional=False)
+    regex = re.compile(result)
+
+    # Assert not optional anymore
+    assert not regex.match("")
 
 
 def test_r_scope__parenthesis_required():
@@ -185,6 +192,18 @@ def test_is_conventional__scope_space():
     input = "feat(scope) : message"
 
     assert not format.is_conventional(input)
+
+
+def test_is_conventional__scope_not_optional():
+    input = "feat: message"
+
+    assert not format.is_conventional(input, optional_scope=False)
+
+
+def test_is_conventional__scope_not_optional_empty_parenthesis():
+    input = "feat(): message"
+
+    assert not format.is_conventional(input, optional_scope=False)
 
 
 def test_is_conventional__missing_delimiter():

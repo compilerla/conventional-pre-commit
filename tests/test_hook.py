@@ -92,3 +92,15 @@ def test_main_fail__conventional_gbk(conventional_gbk_commit_path):
     result = main([conventional_gbk_commit_path])
 
     assert result == RESULT_FAIL
+
+
+def test_main_fail__conventional_with_scope(cmd, conventional_commit_path):
+    result = subprocess.call((cmd, "--force-scope", conventional_commit_path))
+
+    assert result == RESULT_FAIL
+
+
+def test_main_success__conventional_with_scope(cmd, conventional_commit_with_scope_path):
+    result = subprocess.call((cmd, "--force-scope", conventional_commit_with_scope_path))
+
+    assert result == RESULT_SUCCESS

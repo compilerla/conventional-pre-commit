@@ -21,9 +21,12 @@ def r_types(types):
     return "|".join(types)
 
 
-def r_scope():
+def r_scope(optional=True):
     """Regex str for an optional (scope)."""
-    return r"(\([\w \/:-]+\))?"
+    if optional:
+        return r"(\([\w \/:-]+\))?"
+    else:
+        return r"(\([\w \/:-]+\))"
 
 
 def r_delim():
@@ -43,7 +46,7 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org
@@ -51,7 +54,7 @@ def is_conventional(input, types=DEFAULT_TYPES):
     Optionally provide a list of additional custom types.
     """
     types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope()}{r_delim()}{r_subject()}$"
+    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}$"
     regex = re.compile(pattern, re.DOTALL)
 
     return bool(regex.match(input))
