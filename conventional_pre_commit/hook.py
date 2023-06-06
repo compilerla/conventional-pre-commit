@@ -20,6 +20,9 @@ def main(argv=[]):
     )
     parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
     parser.add_argument("input", type=str, help="A file containing a git commit message")
+    parser.add_argument(
+        "--force-scope", action="store_false", default=True, dest="optional_scope", help="Force commit to have scope defined."
+    )
 
     if len(argv) < 1:
         argv = sys.argv[1:]
@@ -44,7 +47,7 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         )
         return RESULT_FAIL
 
-    if format.is_conventional(message, args.types):
+    if format.is_conventional(message, args.types, args.optional_scope):
         return RESULT_SUCCESS
     else:
         print(
@@ -66,7 +69,7 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
 
             fix: remove infinite loop
 
-        {Colors.YELLOW}Optionally, include a scope in parentheses after the type for more context:{Colors.RESTORE}
+        {Colors.YELLOW}Example commit with scope in parentheses after the type for more context:{Colors.RESTORE}
 
             fix(account): remove infinite loop"""
         )

@@ -20,6 +20,11 @@ def conventional_commit_path():
 
 
 @pytest.fixture
+def conventional_commit_with_scope_path():
+    return get_message_path("conventional_commit_with_scope")
+
+
+@pytest.fixture
 def custom_commit_path():
     return get_message_path("custom_commit")
 
