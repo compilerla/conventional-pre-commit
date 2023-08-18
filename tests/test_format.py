@@ -102,6 +102,14 @@ def test_r_subject__special_chars():
     assert regex.match(" some thing")
 
 
+def test_r_autosquash_prefixes():
+    result = format.r_autosquash_prefixes()
+    regex = re.compile(result)
+
+    for prefix in format.AUTOSQUASH_PREFIXES:
+        assert regex.match(prefix)
+
+
 def test_conventional_types__default():
     result = format.conventional_types()
 
@@ -210,3 +218,17 @@ def test_is_conventional__missing_delimiter():
     input = "feat message"
 
     assert not format.is_conventional(input)
+
+
+@pytest.mark.parametrize('input,has_prefix', [
+    ('amend! ', True),
+    ('fixup! ', True),
+    ('squash! ', True),
+    ('squash! whatever .. $12 #', True),
+    ('squash!', False),
+    (' squash! ', False),
+    ('squash!:', False),
+    ('feat(foo):', False),
+])
+def test_has_autosquash_prefix(input, has_prefix):
+    assert format.has_autosquash_prefix(input) == has_prefix
