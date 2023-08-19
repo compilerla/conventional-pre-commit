@@ -23,6 +23,9 @@ def main(argv=[]):
     parser.add_argument(
         "--force-scope", action="store_false", default=True, dest="optional_scope", help="Force commit to have scope defined."
     )
+    parser.add_argument(
+        "--strict", action="store_true", help="Force commit to strictly follow Conventional Commits formatting."
+    )
 
     if len(argv) < 1:
         argv = sys.argv[1:]
@@ -46,6 +49,10 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         """
         )
         return RESULT_FAIL
+
+    if not args.strict:
+        if format.has_autosquash_prefix(message):
+            return RESULT_SUCCESS
 
     if format.is_conventional(message, args.types, args.optional_scope):
         return RESULT_SUCCESS

@@ -1,6 +1,6 @@
 [project]
 name = "conventional_pre_commit"
-version = "2.3.0"
+version = "2.4.0"
 description = "A pre-commit hook that checks commit messages for Conventional Commits formatting."
 readme = "README.md"
 license = { file = "LICENSE" }

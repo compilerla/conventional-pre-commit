@@ -37,3 +37,8 @@ def conventional_utf8_commit_path():
 @pytest.fixture
 def conventional_gbk_commit_path():
     return get_message_path("conventional_commit_gbk")
+
+
+@pytest.fixture
+def fixup_commit_path():
+    return get_message_path("fixup_commit")

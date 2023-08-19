@@ -14,6 +14,11 @@ DEFAULT_TYPES = [
     "style",
     "test",
 ]
+AUTOSQUASH_PREFIXES = [
+    "amend",
+    "fixup",
+    "squash",
+]
 
 
 def r_types(types):
@@ -39,6 +44,11 @@ def r_subject():
     return r" .+"
 
 
+def r_autosquash_prefixes():
+    """Regex str for autosquash prefixes."""
+    return "|".join(AUTOSQUASH_PREFIXES)
+
+
 def conventional_types(types=[]):
     """Return a list of Conventional Commits types merged with the given types."""
     if set(types) & set(CONVENTIONAL_TYPES) == set():
@@ -55,6 +65,20 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
     """
     types = conventional_types(types)
     pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}$"
+    regex = re.compile(pattern, re.DOTALL)
+
+    return bool(regex.match(input))
+
+
+def has_autosquash_prefix(input):
+    """
+    Returns True if input starts with one of the autosquash prefixes used in git.
+    See the documentation, please https://git-scm.com/docs/git-rebase.
+
+    It doesn't check whether the rest of the input matches Conventional Commits
+    formatting.
+    """
+    pattern = f"^(({r_autosquash_prefixes()})! ).*$"
     regex = re.compile(pattern, re.DOTALL)
 
     return bool(regex.match(input))
