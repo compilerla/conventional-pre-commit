@@ -42,3 +42,8 @@ def conventional_gbk_commit_path():
 @pytest.fixture
 def fixup_commit_path():
     return get_message_path("fixup_commit")
+
+
+@pytest.fixture
+def interactive_rebase_commit_path():
+    return get_message_path("interactive_rebase_commit")

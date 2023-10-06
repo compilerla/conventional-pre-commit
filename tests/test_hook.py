@@ -116,3 +116,9 @@ def test_main_success__fail_commit(cmd, fixup_commit_path):
     result = subprocess.call((cmd, "--strict", fixup_commit_path))
 
     assert result == RESULT_FAIL
+
+
+def test_main_success__interactive_rebase_commit(cmd, interactive_rebase_commit_path):
+    result = subprocess.call((cmd, interactive_rebase_commit_path))
+
+    assert result == RESULT_SUCCESS

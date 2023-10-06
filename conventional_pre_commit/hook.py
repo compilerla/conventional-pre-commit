@@ -50,6 +50,7 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         )
         return RESULT_FAIL
 
+    message = format.remove_by_git_ignored_lines(message)
     if not args.strict:
         if format.has_autosquash_prefix(message):
             return RESULT_SUCCESS

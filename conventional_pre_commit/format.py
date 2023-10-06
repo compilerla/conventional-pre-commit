@@ -1,4 +1,5 @@
 import re
+from typing import Iterator
 
 CONVENTIONAL_TYPES = ["feat", "fix"]
 DEFAULT_TYPES = [
@@ -82,3 +83,26 @@ def has_autosquash_prefix(input):
     regex = re.compile(pattern, re.DOTALL)
 
     return bool(regex.match(input))
+
+
+def remove_by_git_ignored_lines(input: str) -> str:
+    """
+    After finishing a commit message, git ignores certain parts
+    and adds only the rest to the actual message stored.
+    In order to prevent failed detection of valid commit messages,
+    these postprocessing steps also need to get applied here
+    before checking for valid Conventional Commits formatting.
+    """
+
+    def get_git_postprocessed_input(_input: str) -> Iterator[str]:
+        first_non_empty_line_found = False
+        for msg_line in _input.split("\n"):
+            if not first_non_empty_line_found and not msg_line.strip():
+                continue
+            elif msg_line.strip().startswith("#"):
+                continue
+            else:
+                first_non_empty_line_found = True
+                yield msg_line
+
+    return "\n".join(get_git_postprocessed_input(input))
