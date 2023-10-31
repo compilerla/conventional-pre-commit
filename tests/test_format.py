@@ -162,13 +162,64 @@ def test_is_conventional__with_scope():
     assert format.is_conventional(input)
 
 
-def test_is_conventional__body_multiline():
+def test_is_conventional__body_multiline_not_strict():
     input = """feat(scope): message
 
     more message
     """
 
-    assert format.is_conventional(input)
+    assert format.is_conventional(input, is_strict=False)
+
+
+def test_is_conventional__body_multiline_no_body_not_strict():
+    input = """feat(scope): message
+
+    """
+    assert format.is_conventional(input, is_strict=False)
+
+
+def test_is_conventional__body_multiline_body_bad_type_strict():
+    input = """wrong: message
+
+    more_message
+    """
+
+    assert not format.is_conventional(input, is_strict=True)
+
+
+def test_is_conventional__bad_body_multiline_not_strict():
+    input = """feat(scope): message
+    more message
+    """
+
+    assert format.is_conventional(input, is_strict=False)
+
+
+def test_is_conventional__bad_body_multiline_strict():
+    input = """feat(scope): message
+    more message
+    """
+
+    assert not format.is_conventional(input, is_strict=True)
+
+
+def test_is_conventional__body_multiline_strict():
+    input = """feat(scope): message
+
+    more message
+    """
+
+    assert format.is_conventional(input, is_strict=True)
+
+
+def test_is_conventional__bad_body_multiline_paragraphs_strict():
+    input = """feat(scope): message
+    more message
+
+    more body message
+    """
+
+    assert not format.is_conventional(input, is_strict=True)
 
 
 @pytest.mark.parametrize("char", ['"', "'", "`", "#", "&"])

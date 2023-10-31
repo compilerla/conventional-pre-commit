@@ -116,3 +116,21 @@ def test_main_success__fail_commit(cmd, fixup_commit_path):
     result = subprocess.call((cmd, "--strict", fixup_commit_path))
 
     assert result == RESULT_FAIL
+
+
+def test_main_success__conventional_commit_multi_line(cmd, conventional_commit_multi_line_path):
+    result = subprocess.call((cmd, conventional_commit_multi_line_path))
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_success__conventional_commit_bad_multi_line(cmd, conventional_commit_bad_multi_line_path):
+    result = subprocess.call((cmd, conventional_commit_bad_multi_line_path))
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_success__conventional_commit_bad_multi_line_strict(cmd, conventional_commit_bad_multi_line_path):
+    result = subprocess.call((cmd, "--strict", conventional_commit_bad_multi_line_path))
+
+    assert result == RESULT_FAIL

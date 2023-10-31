@@ -40,8 +40,13 @@ def r_delim():
 
 
 def r_subject():
-    """Regex str for subject line, body, footer."""
-    return r" .+"
+    """Regex str for subject line."""
+    return r" .+$"
+
+
+def r_body():
+    """Regex str for the body"""
+    return r"(?P<multi>\r?\n(?P<sep>^$\r?\n)?.+)?"
 
 
 def r_autosquash_prefixes():
@@ -56,7 +61,7 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, is_strict=False):
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org
@@ -64,10 +69,15 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
     Optionally provide a list of additional custom types.
     """
     types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}$"
-    regex = re.compile(pattern, re.DOTALL)
+    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"
+    regex = re.compile(pattern, re.MULTILINE)
 
-    return bool(regex.match(input))
+    result = regex.match(input)
+    is_valid_subject = bool(result)
+    if is_valid_subject and is_strict and result.group("multi") and not result.group("sep"):
+        is_valid_subject = False
+
+    return is_valid_subject
 
 
 def has_autosquash_prefix(input):
