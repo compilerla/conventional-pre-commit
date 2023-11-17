@@ -61,7 +61,7 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, is_strict=False):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org
@@ -73,11 +73,11 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, is_strict=F
     regex = re.compile(pattern, re.MULTILINE)
 
     result = regex.match(input)
-    is_valid_subject = bool(result)
-    if is_valid_subject and is_strict and result.group("multi") and not result.group("sep"):
-        is_valid_subject = False
+    is_valid = bool(result)
+    if is_valid and result.group("multi") and not result.group("sep"):
+        is_valid = False
 
-    return is_valid_subject
+    return is_valid
 
 
 def has_autosquash_prefix(input):
