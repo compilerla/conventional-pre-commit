@@ -50,13 +50,13 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         if: ${{ contains(github.ref, '-pre') }}
         with:
-          repository_url: https://test.pypi.org/legacy/
-          print_hash: true
-          skip_existing: true
+          repository-url: https://test.pypi.org/legacy/
+          print-hash: true
+          skip-existing: true
           verbose: true
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: ${{ !contains(github.ref, '-pre') }}
         with:
-          print_hash: true
+          print-hash: true
