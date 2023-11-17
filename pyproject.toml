@@ -44,6 +44,9 @@ branch = true
 relative_files = true
 source = ["conventional_pre_commit"]
 
+[tool.pyright]
+include = ["conventional_pre_commit", "tests"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 norecursedirs = [
@@ -52,6 +55,9 @@ norecursedirs = [
     ".pytest_cache",
     ".vscode",
 ]
+
+[tool.setuptools]
+packages = ["conventional_pre_commit"]
 
 [tool.setuptools_scm]
 # intentionally left blank, but we need the section header to activate the tool
