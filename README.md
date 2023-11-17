@@ -180,22 +180,11 @@ Versioning generally follows [Semantic Versioning](https://semver.org/).
 
 ## Making a release
 
-Releases to PyPI are triggered by [publishing a release on GitHub](https://github.com/compilerla/conventional-pre-commit/releases/new).
+Releases to PyPI and GitHub are triggered by pushing a tag.
 
-1. Create a branch `chore/release`
-1. Bump the version in `pyproject.toml`
-1. PR, merge `chore/release` into `main`
-1. Tag `main` with the new version (prefixed by `v`):
-
-   ```bash
-   git fetch
-   git reset --hard origin/main
-   git tag vX.Y.Z
-   git push origin vX.Y.Z
-   ```
-
-1. Publish a pre-release to push the new package to TestPyPI
-1. Publish a regular Release to push the new package to PyPI
+1. Ensure all changes for the release are present in the `main` branch
+1. Tag with the new version: `git tag vX.Y.Z` for regular release, `git tag vX.Y.Z-preN` for pre-release
+1. Push the new version tag: `git push origin vX.Y.Z`
 
 ## License
 
