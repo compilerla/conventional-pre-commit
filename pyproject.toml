@@ -1,6 +1,6 @@
 [project]
 name = "conventional_pre_commit"
-version = "2.4.0"
+dynamic = ["version"]
 description = "A pre-commit hook that checks commit messages for Conventional Commits formatting."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -24,13 +24,14 @@ dev = [
     "flake8",
     "pre-commit",
     "pytest",
+    "setuptools_scm",
 ]
 
 [project.scripts]
 conventional-pre-commit = "conventional_pre_commit.hook:main"
 
 [build-system]
-requires = ["setuptools>=64", "wheel"]
+requires = ["setuptools>=65", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
@@ -51,3 +52,6 @@ norecursedirs = [
     ".pytest_cache",
     ".vscode",
 ]
+
+[tool.setuptools_scm]
+# intentionally left blank, but we need the section header to activate the tool
