@@ -9,7 +9,7 @@ keywords = ["git", "pre-commit", "conventional-commits"]
 authors = [
     { name = "Compiler LLC", email = "dev@compiler.la" }
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = []
 
 [project.urls]
