@@ -47,7 +47,7 @@ jobs:
           generate_release_notes: ${{ !contains(github.ref, '-pre') }}
 
       - name: Publish to Test PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1.5
+        uses: pypa/gh-action-pypi-publish@release/v1
         if: ${{ contains(github.ref, '-pre') }}
         with:
           repository_url: https://test.pypi.org/legacy/
@@ -56,7 +56,7 @@ jobs:
           verbose: true
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1.5
+        uses: pypa/gh-action-pypi-publish@release/v1
         if: ${{ !contains(github.ref, '-pre') }}
         with:
           print_hash: true
