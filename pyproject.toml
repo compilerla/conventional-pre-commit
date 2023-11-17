@@ -20,10 +20,10 @@ tracker = "https://github.com/compilerla/conventional-pre-commit/issues"
 dev = [
     "black",
     "build",
+    "coverage",
     "flake8",
     "pre-commit",
     "pytest",
-    "pytest-cov"
 ]
 
 [project.scripts]
@@ -37,6 +37,11 @@ build-backend = "setuptools.build_meta"
 line-length = 127
 target-version = ['py311']
 include = '\.pyi?$'
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+source = ["conventional_pre_commit"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
