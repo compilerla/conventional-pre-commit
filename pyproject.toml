@@ -1,6 +1,6 @@
 [project]
 name = "conventional_pre_commit"
-version = "2.4.0"
+dynamic = ["version"]
 description = "A pre-commit hook that checks commit messages for Conventional Commits formatting."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -9,7 +9,7 @@ keywords = ["git", "pre-commit", "conventional-commits"]
 authors = [
     { name = "Compiler LLC", email = "dev@compiler.la" }
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = []
 
 [project.urls]
@@ -20,23 +20,32 @@ tracker = "https://github.com/compilerla/conventional-pre-commit/issues"
 dev = [
     "black",
     "build",
+    "coverage",
     "flake8",
     "pre-commit",
     "pytest",
-    "pytest-cov"
+    "setuptools_scm",
 ]
 
 [project.scripts]
 conventional-pre-commit = "conventional_pre_commit.hook:main"
 
 [build-system]
-requires = ["setuptools>=64", "wheel"]
+requires = ["setuptools>=65", "setuptools-scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 127
 target-version = ['py311']
 include = '\.pyi?$'
+
+[tool.coverage.run]
+branch = true
+relative_files = true
+source = ["conventional_pre_commit"]
+
+[tool.pyright]
+include = ["conventional_pre_commit", "tests"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -46,3 +55,9 @@ norecursedirs = [
     ".pytest_cache",
     ".vscode",
 ]
+
+[tool.setuptools]
+packages = ["conventional_pre_commit"]
+
+[tool.setuptools_scm]
+# intentionally left blank, but we need the section header to activate the tool

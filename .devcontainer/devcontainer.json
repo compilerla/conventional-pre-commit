@@ -18,12 +18,13 @@
       },
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
-        "bungcip.better-toml",
         "eamodio.gitlens",
         "esbenp.prettier-vscode",
         "mhutchie.git-graph",
         "ms-python.python",
-        "ms-python.vscode-pylance"
+        "ms-python.black-formatter",
+        "ms-python.flake8",
+        "tamasfe.even-better-toml"
       ]
     }
   }

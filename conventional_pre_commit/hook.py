@@ -24,7 +24,9 @@ def main(argv=[]):
         "--force-scope", action="store_false", default=True, dest="optional_scope", help="Force commit to have scope defined."
     )
     parser.add_argument(
-        "--strict", action="store_true", help="Force commit to strictly follow Conventional Commits formatting."
+        "--strict",
+        action="store_true",
+        help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
     )
 
     if len(argv) < 1:
@@ -54,7 +56,7 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         if format.has_autosquash_prefix(message):
             return RESULT_SUCCESS
 
-    if format.is_conventional(message, args.types, args.optional_scope, args.strict):
+    if format.is_conventional(message, args.types, args.optional_scope):
         return RESULT_SUCCESS
     else:
         print(
@@ -80,7 +82,7 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
 
             fix(account): remove infinite loop
 
-        {Colors.YELLOW}Example commit with a body
+        {Colors.YELLOW}Example commit with a body:{Colors.RESTORE}
 
             fix: remove infinite loop
 
