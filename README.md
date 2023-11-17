@@ -3,6 +3,8 @@
 A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
 [Conventional Commits](https://conventionalcommits.org) formatting.
 
+Works with Python >= 3.8.
+
 ## Usage
 
 Make sure `pre-commit` is [installed](https://pre-commit.com#install).
@@ -24,7 +26,7 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [] # optional: list of Conventional Commits types to allow e.g. [feat, fix, ci, chore, test]
+        args: []
 ```
 
 Install the `pre-commit` script:
@@ -62,9 +64,15 @@ Example commit message fixing an issue:
 
     fix: remove infinite loop
 
-Optionally, include a scope in parentheses after the type for more context:
+Example commit with scope in parentheses after the type for more context:
 
     fix(account): remove infinite loop
+
+Example commit with a body:
+
+    fix: remove infinite loop
+
+    Additional information on the issue caused by the infinite loop
 ```
 
 Make a (conventional) commit :heavy_check_mark::
@@ -114,6 +122,40 @@ print(is_conventional("nope: this is not a conventional commit"))
 # prints True
 print(is_conventional("custom: this is a conventional commit", types=["custom"]))
 ```
+
+## Passing `args`
+
+`conventional-pre-commit` supports a number of arguments to configure behavior:
+
+```shell
+$ conventional-pre-commit -h
+usage: conventional-pre-commit [-h] [--force-scope] [--strict] [types ...] input
+
+Check a git commit message for Conventional Commits formatting.
+
+positional arguments:
+  types          Optional list of types to support
+  input          A file containing a git commit message
+
+options:
+  -h, --help     show this help message and exit
+  --force-scope  Force commit to have scope defined.
+  --strict       Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
+```
+
+Supply arguments on the command-line, or via the pre-commit `hooks.args` property:
+
+```yaml
+repos:
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: <git sha or tag>
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [--strict, --force-scope, feat, fix, chore, test, custom]
+```
+
+**NOTE:** when using as a pre-commit hook, `input` is supplied automatically (with the current commit's message).
 
 ## Development
 
