@@ -44,7 +44,7 @@ jobs:
 
       - name: Coverage comment
         uses: py-cov-action/python-coverage-comment-action@v3
-        if: github.event_name != 'workflow_call' && matrix.version == '3.11'
+        if: github.event_name != 'workflow_call' && matrix.python-version == '3.11'
         with:
           GITHUB_TOKEN: ${{ github.token }}
           MINIMUM_GREEN: 90
