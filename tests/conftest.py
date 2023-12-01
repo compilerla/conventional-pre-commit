@@ -52,3 +52,13 @@ def conventional_commit_bad_multi_line_path():
 @pytest.fixture
 def conventional_commit_multi_line_path():
     return get_message_path("conventional_commit_multi_line")
+
+
+@pytest.fixture
+def conventional_commit_bad_subject_length_path():
+    return get_message_path("conventional_commit_bad_subject_length")
+
+
+@pytest.fixture
+def conventional_commit_subject_length_path():
+    return get_message_path("conventional_commit_subject_length")

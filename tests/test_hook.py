@@ -93,6 +93,17 @@ def test_main_fail__conventional_commit_bad_multi_line(conventional_commit_bad_m
 
     assert result == RESULT_FAIL
 
+def test_main_success__conventional_commit_subject_length(conventional_commit_subject_length_path):
+    result = main(["--subject-length", conventional_commit_subject_length_path])
+
+    assert result == RESULT_SUCCESS
+
+
+def test_main_fail__conventional_commit_bad_subject_length(conventional_commit_bad_subject_length_path):
+    result = main(["--subject-length", conventional_commit_bad_subject_length_path])
+
+    assert result == RESULT_FAIL
+
 
 def test_subprocess_fail__missing_args(cmd):
     result = subprocess.call(cmd)
@@ -162,5 +173,17 @@ def test_subprocess_success__conventional_commit_multi_line(cmd, conventional_co
 
 def test_subprocess_fail__conventional_commit_bad_multi_line(cmd, conventional_commit_bad_multi_line_path):
     result = subprocess.call((cmd, conventional_commit_bad_multi_line_path))
+
+    assert result == RESULT_FAIL
+
+
+def test_subprocess_success__conventional_commit_subject_length(cmd, conventional_commit_subject_length_path):
+    result = subprocess.call((cmd, conventional_commit_subject_length_path))
+
+    assert result == RESULT_SUCCESS
+
+
+def test_subprocess_fail__conventional_commit_bad_subject_length(cmd, conventional_commit_bad_subject_length_path):
+    result = subprocess.call((cmd, conventional_commit_bad_subject_length_path))
 
     assert result == RESULT_FAIL
