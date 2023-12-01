@@ -93,6 +93,7 @@ def test_main_fail__conventional_commit_bad_multi_line(conventional_commit_bad_m
 
     assert result == RESULT_FAIL
 
+
 def test_main_success__conventional_commit_subject_length(conventional_commit_subject_length_path):
     result = main(["--subject-length", conventional_commit_subject_length_path])
 

@@ -16,7 +16,8 @@ class Colors:
 
 def main(argv=[]):
     parser = argparse.ArgumentParser(
-        prog="conventional-pre-commit", description="Check a git commit message for Conventional Commits formatting.",
+        prog="conventional-pre-commit",
+        description="Check a git commit message for Conventional Commits formatting.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
@@ -79,7 +80,9 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         if format.has_autosquash_prefix(message):
             return RESULT_SUCCESS
 
-    if format.is_conventional(message, args.types, args.optional_scope, args.subject_length, args.subject_min, args.subject_max):
+    if format.is_conventional(
+        message, args.types, args.optional_scope, args.subject_length, args.subject_min, args.subject_max
+    ):
         return RESULT_SUCCESS
     else:
         print(
