@@ -16,7 +16,8 @@ class Colors:
 
 def main(argv=[]):
     parser = argparse.ArgumentParser(
-        prog="conventional-pre-commit", description="Check a git commit message for Conventional Commits formatting."
+        prog="conventional-pre-commit", description="Check a git commit message for Conventional Commits formatting.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
     parser.add_argument("input", type=str, help="A file containing a git commit message")
