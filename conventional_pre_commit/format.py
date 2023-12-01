@@ -39,8 +39,10 @@ def r_delim():
     return r"!?:"
 
 
-def r_subject():
+def r_subject(length=False, min_length=None, max_length=None):
     """Regex str for subject line."""
+    if length:
+        return r" .{" + min_length + "," + max_length + "}$"
     return r" .+$"
 
 
@@ -61,7 +63,7 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, subject_length=False, subject_min=None, subject_max=None):
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org
@@ -69,7 +71,7 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
     Optionally provide a list of additional custom types.
     """
     types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"
+    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject(subject_length, subject_min, subject_max)}{r_body()}"
     regex = re.compile(pattern, re.MULTILINE)
 
     result = regex.match(input)

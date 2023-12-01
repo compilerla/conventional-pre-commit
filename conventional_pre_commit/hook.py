@@ -28,6 +28,28 @@ def main(argv=[]):
         action="store_true",
         help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
     )
+    parser.add_argument(
+        "--subject-length",
+        action="store_true",
+        default=False,
+        help="Force commit to have minimal, and maximal subject lengths.",
+    )
+    parser.add_argument(
+        "--subject-min",
+        default="5",
+        dest="subject_min",
+        help="Set minimal commit subject length.",
+        metavar="n",
+        type=str,
+    )
+    parser.add_argument(
+        "--subject-max",
+        default="72",
+        dest="subject_max",
+        help="Set maximal commit subject length.",
+        metavar="n",
+        type=str,
+    )
 
     if len(argv) < 1:
         argv = sys.argv[1:]
@@ -56,7 +78,7 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         if format.has_autosquash_prefix(message):
             return RESULT_SUCCESS
 
-    if format.is_conventional(message, args.types, args.optional_scope):
+    if format.is_conventional(message, args.types, args.optional_scope, args.subject_length, args.subject_min, args.subject_max):
         return RESULT_SUCCESS
     else:
         print(
@@ -68,8 +90,18 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         Conventional Commits start with one of the below types, followed by a colon,
         followed by the commit subject and an optional body seperated by a blank line:{Colors.RESTORE}
 
-            {" ".join(format.conventional_types(args.types))}
+            {" ".join(format.conventional_types(args.types))}"""
+        )
 
+        if args.subject_length:
+            print(
+                f"""
+        {Colors.YELLOW}The commit subject must be at least 5 charactes long, and should not exceed
+        a maximum length of 72 charactes.{Colors.RESTORE}"""
+            )
+
+        print(
+            f"""
         {Colors.YELLOW}Example commit message adding a feature:{Colors.RESTORE}
 
             feat: implement new API
