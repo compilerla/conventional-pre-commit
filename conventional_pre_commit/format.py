@@ -71,7 +71,8 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, subject_len
     Optionally provide a list of additional custom types.
     """
     types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject(subject_length, subject_min, subject_max)}{r_body()}"
+    pattern = f"^(\
+    {r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject(subject_length, subject_min, subject_max)}{r_body()}"
     regex = re.compile(pattern, re.MULTILINE)
 
     result = regex.match(input)
