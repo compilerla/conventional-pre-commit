@@ -136,6 +136,7 @@ def test_strip_comments__consecutive():
     """
     result = format.strip_comments(input)
     assert result.count("\n") == 1
+    assert result.strip() == "feat(scope): message"
 
 
 def test_strip_comments__spaced():
@@ -146,6 +147,7 @@ def test_strip_comments__spaced():
     """
     result = format.strip_comments(input)
     assert result.count("\n") == 2
+    assert result.strip() == "feat(scope): message"
 
 
 @pytest.mark.parametrize("type", format.DEFAULT_TYPES)
