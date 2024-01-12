@@ -54,6 +54,15 @@ def r_autosquash_prefixes():
     return "|".join(AUTOSQUASH_PREFIXES)
 
 
+def r_comment():
+    """Regex str for comment"""
+    return r"^#.*\r?\n?"
+
+
+def strip_comments(input):
+    return re.sub(r_comment(), "", input, flags=re.MULTILINE)
+
+
 def conventional_types(types=[]):
     """Return a list of Conventional Commits types merged with the given types."""
     if set(types) & set(CONVENTIONAL_TYPES) == set():
@@ -68,6 +77,7 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
 
     Optionally provide a list of additional custom types.
     """
+    input = strip_comments(input)
     types = conventional_types(types)
     pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"
     regex = re.compile(pattern, re.MULTILINE)

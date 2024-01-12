@@ -123,6 +123,34 @@ def test_conventional_types__custom():
     assert set(["custom", *format.CONVENTIONAL_TYPES]) == set(result)
 
 
+def test_r_comment_single():
+    regex = re.compile(format.r_comment())
+    assert regex.match("# Some comment")
+    assert not regex.match("Some comment")
+    assert not regex.match(" # Some comment")
+
+
+def test_strip_comments__consecutive():
+    input = """feat(scope): message
+# Please enter the commit message for your changes.
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+    """
+    result = format.strip_comments(input)
+    assert result.count("\n") == 1
+    assert result.strip() == "feat(scope): message"
+
+
+def test_strip_comments__spaced():
+    input = """feat(scope): message
+# Please enter the commit message for your changes.
+
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+    """
+    result = format.strip_comments(input)
+    assert result.count("\n") == 2
+    assert result.strip() == "feat(scope): message"
+
+
 @pytest.mark.parametrize("type", format.DEFAULT_TYPES)
 def test_is_conventional__default_type(type):
     input = f"{type}: message"
@@ -197,6 +225,14 @@ def test_is_conventional__bad_body_multiline_paragraphs():
     """
 
     assert not format.is_conventional(input)
+
+
+def test_is_conventional__comment():
+    input = """feat(scope): message
+# Please enter the commit message for your changes.
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+"""
+    assert format.is_conventional(input)
 
 
 @pytest.mark.parametrize("char", ['"', "'", "`", "#", "&"])
