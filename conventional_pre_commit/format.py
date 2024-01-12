@@ -29,9 +29,9 @@ def r_types(types):
 def r_scope(optional=True):
     """Regex str for an optional (scope)."""
     if optional:
-        return r"(\([\w \/:-]+\))?"
+        return r"(\([\w \/:,-]+\))?"
     else:
-        return r"(\([\w \/:-]+\))"
+        return r"(\([\w \/:,-]+\))"
 
 
 def r_delim():

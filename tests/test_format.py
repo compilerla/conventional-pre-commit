@@ -61,6 +61,7 @@ def test_r_scope__special_chars():
     assert regex.match("(some/thing)")
     assert regex.match("(some thing)")
     assert regex.match("(some:thing)")
+    assert regex.match("(some,thing)")
 
 
 def test_r_delim():
