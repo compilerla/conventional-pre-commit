@@ -66,8 +66,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="d_c34a85571d08a56f_hook_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.1">coverage.py v7.4.1</a>,
-            created at 2024-02-13 00:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.3">coverage.py v7.4.3</a>,
+            created at 2024-03-13 21:52 +0000
         </p>
         <aside class="hidden">
             <button type="button" class="button_next_chunk" data-shortcut="j"/>
@@ -163,7 +163,7 @@
     <p class="pln"><span class="n"><a id="t79" href="#t79">79</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t80" href="#t80">80</a></span><span class="t">    <span class="nam">input</span> <span class="op">=</span> <span class="nam">strip_comments</span><span class="op">(</span><span class="nam">input</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t81" href="#t81">81</a></span><span class="t">    <span class="nam">types</span> <span class="op">=</span> <span class="nam">conventional_types</span><span class="op">(</span><span class="nam">types</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">    <span class="nam">pattern</span> <span class="op">=</span> <span class="str">f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t82" href="#t82">82</a></span><span class="t">    <span class="nam">pattern</span> <span class="op">=</span> <span class="fst">f"</span><span class="fst">^(</span><span class="op">{</span><span class="nam">r_types</span><span class="op">(</span><span class="nam">types</span><span class="op">)</span><span class="op">}</span><span class="fst">)</span><span class="op">{</span><span class="nam">r_scope</span><span class="op">(</span><span class="nam">optional_scope</span><span class="op">)</span><span class="op">}</span><span class="op">{</span><span class="nam">r_delim</span><span class="op">(</span><span class="op">)</span><span class="op">}</span><span class="op">{</span><span class="nam">r_subject</span><span class="op">(</span><span class="op">)</span><span class="op">}</span><span class="op">{</span><span class="nam">r_body</span><span class="op">(</span><span class="op">)</span><span class="op">}</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t83" href="#t83">83</a></span><span class="t">    <span class="nam">regex</span> <span class="op">=</span> <span class="nam">re</span><span class="op">.</span><span class="nam">compile</span><span class="op">(</span><span class="nam">pattern</span><span class="op">,</span> <span class="nam">re</span><span class="op">.</span><span class="nam">MULTILINE</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t84" href="#t84">84</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t85" href="#t85">85</a></span><span class="t">    <span class="nam">result</span> <span class="op">=</span> <span class="nam">regex</span><span class="op">.</span><span class="nam">match</span><span class="op">(</span><span class="nam">input</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -182,7 +182,7 @@
     <p class="pln"><span class="n"><a id="t98" href="#t98">98</a></span><span class="t"><span class="str">    It doesn't check whether the rest of the input matches Conventional Commits</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t99" href="#t99">99</a></span><span class="t"><span class="str">    formatting.</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t100" href="#t100">100</a></span><span class="t"><span class="str">    """</span>&nbsp;</span><span class="r"></span></p>
-    <p class="run"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">    <span class="nam">pattern</span> <span class="op">=</span> <span class="str">f"^(({r_autosquash_prefixes()})! ).*$"</span>&nbsp;</span><span class="r"></span></p>
+    <p class="run"><span class="n"><a id="t101" href="#t101">101</a></span><span class="t">    <span class="nam">pattern</span> <span class="op">=</span> <span class="fst">f"</span><span class="fst">^((</span><span class="op">{</span><span class="nam">r_autosquash_prefixes</span><span class="op">(</span><span class="op">)</span><span class="op">}</span><span class="fst">)! ).*$</span><span class="fst">"</span>&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t102" href="#t102">102</a></span><span class="t">    <span class="nam">regex</span> <span class="op">=</span> <span class="nam">re</span><span class="op">.</span><span class="nam">compile</span><span class="op">(</span><span class="nam">pattern</span><span class="op">,</span> <span class="nam">re</span><span class="op">.</span><span class="nam">DOTALL</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p class="pln"><span class="n"><a id="t103" href="#t103">103</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p class="run"><span class="n"><a id="t104" href="#t104">104</a></span><span class="t">    <span class="key">return</span> <span class="nam">bool</span><span class="op">(</span><span class="nam">regex</span><span class="op">.</span><span class="nam">match</span><span class="op">(</span><span class="nam">input</span><span class="op">)</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
@@ -194,8 +194,8 @@
             <a id="indexLink" class="nav" href="index.html">&Hat; index</a> &nbsp; &nbsp;
             <a id="nextFileLink" class="nav" href="d_c34a85571d08a56f_hook_py.html">&#xbb; next</a>
             &nbsp; &nbsp; &nbsp;
-            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.1">coverage.py v7.4.1</a>,
-            created at 2024-02-13 00:33 +0000
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.4.3">coverage.py v7.4.3</a>,
+            created at 2024-03-13 21:52 +0000
         </p>
     </div>
 </footer>
