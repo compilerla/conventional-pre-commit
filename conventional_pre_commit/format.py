@@ -54,6 +54,15 @@ def r_autosquash_prefixes():
     return "|".join(AUTOSQUASH_PREFIXES)
 
 
+def r_verbose_diff():
+    """Regex str for verbose diff"""
+    return r"(?P<diff>(^# -* >8 -*$\r?\n)(^# .*$\r?\n)+(diff ){1}(.*\r?\n)*)"
+
+
+def strip_verbose_diff(input):
+    return re.sub(r_verbose_diff(), "", input, flags=re.MULTILINE)
+
+
 def r_comment():
     """Regex str for comment"""
     return r"^#.*\r?\n?"
@@ -77,6 +86,7 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
 
     Optionally provide a list of additional custom types.
     """
+    input = strip_verbose_diff(input)
     input = strip_comments(input)
     types = conventional_types(types)
     pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"

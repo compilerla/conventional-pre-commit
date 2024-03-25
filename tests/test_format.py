@@ -151,6 +151,73 @@ def test_strip_comments__spaced():
     assert result.strip() == "feat(scope): message"
 
 
+def test_r_verbose_diff__has_diff():
+    regex = re.compile(format.r_verbose_diff(), re.MULTILINE)
+    input = """# ----------- >8 -----------
+# Some comment
+# Some comment
+diff --git a/file b/file
+"""
+
+    assert regex.match(input)
+
+
+def test_r_verbose_diff__no_diff():
+    regex = re.compile(format.r_verbose_diff(), re.MULTILINE)
+    input = """# ----------- >8 -----------
+# Some comment
+# Some comment
+"""
+
+    assert not regex.match(input)
+
+
+def test_r_verbose_diff__no_extra_comments():
+    regex = re.compile(format.r_verbose_diff(), re.MULTILINE)
+    input = """# ----------- >8 -----------
+diff --git a/file b/file
+"""
+
+    assert not regex.match(input)
+
+
+def test_strip_verbose_diff__has_diff():
+    input = """feat(scope): message
+# Please enter the commit message for your changes.
+
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+# ----------- >8 -----------
+# Some comment
+# Some comment
+diff --git a/file b/file
+"""
+
+    result = format.strip_verbose_diff(input)
+    assert result.count("\n") == 4
+    assert (
+        result
+        == """feat(scope): message
+# Please enter the commit message for your changes.
+
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+"""
+    )
+
+
+def test_strip_verbose_diff__no_diff():
+    input = """feat(scope): message
+# Please enter the commit message for your changes.
+
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+# ----------- >8 -----------
+# Some comment
+# Some comment
+"""
+
+    result = format.strip_verbose_diff(input)
+    assert result == input
+
+
 @pytest.mark.parametrize("type", format.DEFAULT_TYPES)
 def test_is_conventional__default_type(type):
     input = f"{type}: message"
