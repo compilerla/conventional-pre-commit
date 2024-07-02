@@ -64,6 +64,18 @@ def test_r_scope__special_chars():
     assert regex.match("(some,thing)")
 
 
+def test_r_scope__scopes():
+    scopes_input = ["api", "client"]
+    result = format.r_scope(scopes=scopes_input)
+    regex = re.compile(result)
+    assert regex.match("(api)")
+    assert regex.match("(client)")
+    assert regex.match("(api, client)")
+    assert regex.match("(api: client)")
+    assert not regex.match("(test)")
+    assert not regex.match("(api; client)")
+
+
 def test_r_delim():
     result = format.r_delim()
     regex = re.compile(result)

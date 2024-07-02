@@ -1,4 +1,5 @@
 import re
+from typing import List, Optional
 
 CONVENTIONAL_TYPES = ["feat", "fix"]
 DEFAULT_TYPES = [
@@ -26,11 +27,23 @@ def r_types(types):
     return "|".join(types)
 
 
-def r_scope(optional=True):
+def r_scope(optional=True, scopes: Optional[List[str]] = None):
     """Regex str for an optional (scope)."""
+
     if optional:
+        if scopes:
+            scopes_str = r_types(scopes)
+            # delims_str = r_types([":", ",", "-"])
+            escaped_delimiters = list(map(re.escape, [":", ","]))  # type: ignore
+            delimiters_pattern = r_types(escaped_delimiters)
+            return rf"\(\s*(?:{scopes_str})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes_str}))*\s*\)"
         return r"(\([\w \/:,-]+\))?"
     else:
+        if scopes:
+            scopes_str = r_types(scopes)
+            escaped_delimiters = list(map(re.escape, [":", ","]))  # type: ignore
+            delimiters_pattern = r_types(escaped_delimiters)
+            return rf"\(\s*(?:{scopes_str})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes_str}))*\s*\)"
         return r"(\([\w \/:,-]+\))"
 
 
@@ -79,7 +92,7 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[list[str]] = None):
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org
@@ -89,7 +102,7 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True):
     input = strip_verbose_diff(input)
     input = strip_comments(input)
     types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope(optional_scope)}{r_delim()}{r_subject()}{r_body()}"
+    pattern = f"^({r_types(types)}){r_scope(optional_scope, scopes=scopes)}{r_delim()}{r_subject()}{r_body()}"
     regex = re.compile(pattern, re.MULTILINE)
 
     result = regex.match(input)
