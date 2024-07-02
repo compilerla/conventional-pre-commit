@@ -27,23 +27,23 @@ def r_types(types):
     return "|".join(types)
 
 
+def _get_scope_pattern(scopes: Optional[List[str]] = None):
+    scopes_str = r_types(scopes)
+    escaped_delimiters = list(map(re.escape, [":", ","]))  # type: ignore
+    delimiters_pattern = r_types(escaped_delimiters)
+    return rf"\(\s*(?:{scopes_str})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes_str}))*\s*\)"
+
+
 def r_scope(optional=True, scopes: Optional[List[str]] = None):
     """Regex str for an optional (scope)."""
 
+    if scopes:
+        scopes_pattern = _get_scope_pattern(scopes)
+        return scopes_pattern
+
     if optional:
-        if scopes:
-            scopes_str = r_types(scopes)
-            # delims_str = r_types([":", ",", "-"])
-            escaped_delimiters = list(map(re.escape, [":", ","]))  # type: ignore
-            delimiters_pattern = r_types(escaped_delimiters)
-            return rf"\(\s*(?:{scopes_str})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes_str}))*\s*\)"
         return r"(\([\w \/:,-]+\))?"
     else:
-        if scopes:
-            scopes_str = r_types(scopes)
-            escaped_delimiters = list(map(re.escape, [":", ","]))  # type: ignore
-            delimiters_pattern = r_types(escaped_delimiters)
-            return rf"\(\s*(?:{scopes_str})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes_str}))*\s*\)"
         return r"(\([\w \/:,-]+\))"
 
 
