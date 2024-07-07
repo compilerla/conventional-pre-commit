@@ -28,7 +28,12 @@ def main(argv=[]):
         action="store_true",
         help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
     )
-    parser.add_argument("scopes", type=str, nargs="*", default=None, help="Optional list of scopes to support")
+    parser.add_argument(
+        "--scopes",
+        type=str,
+        default=None,
+        help="Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)",
+    )
 
     if len(argv) < 1:
         argv = sys.argv[1:]
@@ -52,12 +57,16 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         """
         )
         return RESULT_FAIL
+    if args.scopes:
+        scopes = args.scopes.split(",")
+    else:
+        scopes = args.scopes
 
     if not args.strict:
         if format.has_autosquash_prefix(message):
             return RESULT_SUCCESS
 
-    if format.is_conventional(message, args.types, args.optional_scope, args.scopes):
+    if format.is_conventional(message, args.types, args.optional_scope, scopes):
         return RESULT_SUCCESS
     else:
         print(

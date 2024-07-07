@@ -142,6 +142,16 @@ def test_subprocess_success__conventional_with_scope(cmd, conventional_commit_wi
     assert result == RESULT_SUCCESS
 
 
+def test_subprocess_success__conventional_with_multiple_scopes(cmd, conventional_commit_with_multiple_scopes_path):
+    result = subprocess.call((cmd, "--scopes", "api,client", conventional_commit_with_multiple_scopes_path))
+    assert result == RESULT_SUCCESS
+
+
+def test_subprocess_fail__conventional_with_multiple_scopes(cmd, conventional_commit_with_multiple_scopes_path):
+    result = subprocess.call((cmd, "--scopes", "api", conventional_commit_with_multiple_scopes_path))
+    assert result == RESULT_FAIL
+
+
 def test_subprocess_success__fixup_commit(cmd, fixup_commit_path):
     result = subprocess.call((cmd, fixup_commit_path))
 
