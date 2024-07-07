@@ -29,7 +29,7 @@ def r_types(types):
 
 def _get_scope_pattern(scopes: Optional[List[str]] = None):
     scopes_str = r_types(scopes)
-    escaped_delimiters = list(map(re.escape, [":", ","]))  # type: ignore
+    escaped_delimiters = list(map(re.escape, [":", ",", "-", "/"]))  # type: ignore
     delimiters_pattern = r_types(escaped_delimiters)
     return rf"\(\s*(?:{scopes_str})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes_str}))*\s*\)"
 
@@ -92,7 +92,7 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[list[str]] = None):
+def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None):
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org

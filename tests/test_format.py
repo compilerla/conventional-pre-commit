@@ -72,6 +72,8 @@ def test_r_scope__scopes():
     assert regex.match("(client)")
     assert regex.match("(api, client)")
     assert regex.match("(api: client)")
+    assert regex.match("(api/client)")
+    assert regex.match("(api-client)")
     assert not regex.match("(test)")
     assert not regex.match("(api; client)")
 
