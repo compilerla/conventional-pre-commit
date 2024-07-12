@@ -129,18 +129,19 @@ print(is_conventional("custom: this is a conventional commit", types=["custom"])
 
 ```shell
 $ conventional-pre-commit -h
-usage: conventional-pre-commit [-h] [--force-scope] [--strict] [types ...] input
+usage: conventional-pre-commit [-h] [--force-scope] [--scopes SCOPES] [--strict] [types ...] input
 
 Check a git commit message for Conventional Commits formatting.
 
 positional arguments:
-  types          Optional list of types to support
-  input          A file containing a git commit message
+  types            Optional list of types to support
+  input            A file containing a git commit message
 
 options:
-  -h, --help     show this help message and exit
-  --force-scope  Force commit to have scope defined.
-  --strict       Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
+  -h, --help       show this help message and exit
+  --force-scope    Force commit to have scope defined.
+  --scopes SCOPES  Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)
+  --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
 ```
 
 Supply arguments on the command-line, or via the pre-commit `hooks.args` property:
