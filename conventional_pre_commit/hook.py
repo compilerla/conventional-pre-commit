@@ -24,15 +24,15 @@ def main(argv=[]):
         "--force-scope", action="store_false", default=True, dest="optional_scope", help="Force commit to have scope defined."
     )
     parser.add_argument(
-        "--strict",
-        action="store_true",
-        help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
-    )
-    parser.add_argument(
         "--scopes",
         type=str,
         default=None,
         help="Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)",
+    )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
     )
 
     if len(argv) < 1:
