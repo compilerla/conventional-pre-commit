@@ -126,6 +126,7 @@ def has_autosquash_prefix(input):
 
     return bool(regex.match(input))
 
+
 def is_merge_commit(input):
     """
     Returns True if input starts with 'Merge branch '.

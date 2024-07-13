@@ -124,8 +124,10 @@ def test_r_autosquash_prefixes():
     for prefix in format.AUTOSQUASH_PREFIXES:
         assert regex.match(prefix)
 
+
 def test_merge_commit():
     assert format.is_merge_commit("Merge branch '2.x.x' into '1.x.x'")
+
 
 def test_conventional_types__default():
     result = format.conventional_types()
