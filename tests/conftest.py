@@ -43,6 +43,9 @@ def conventional_gbk_commit_path():
 def fixup_commit_path():
     return get_message_path("fixup_commit")
 
+@pytest.fixture
+def merge_commit_path():
+    return get_message_path("merge_commit")
 
 @pytest.fixture
 def conventional_commit_bad_multi_line_path():

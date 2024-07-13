@@ -159,3 +159,13 @@ def has_autosquash_prefix(input):
     regex = re.compile(pattern, re.DOTALL)
 
     return bool(regex.match(input))
+
+def is_merge_commit(input):
+    """
+    Returns True if input starts with 'Merge branch '.
+
+    It doesn't check whether the rest of the input matches Conventional Commits
+    formatting.
+    """
+
+    return input.startswith("Merge branch ")

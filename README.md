@@ -152,6 +152,7 @@ options:
   --no-color       Disable color in output.
   --force-scope    Force commit to have scope defined.
   --scopes SCOPES  Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)
+  --skip-merges    Do not check format for merge commits.
   --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
   --verbose        Print more verbose error output.
 ```
