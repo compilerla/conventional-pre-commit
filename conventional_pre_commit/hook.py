@@ -24,6 +24,13 @@ def main(argv=[]):
         help="Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)",
     )
     parser.add_argument(
+        "--skip-merges",
+        action="store_true",
+        default=False,
+        dest="skip_merges",
+        help="Do not check format for merge commits.",
+    )
+    parser.add_argument(
         "--strict",
         action="store_true",
         help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
@@ -54,6 +61,10 @@ def main(argv=[]):
         scopes = args.scopes.split(",")
     else:
         scopes = args.scopes
+
+    if args.skip_merges:
+        if format.is_merge_commit(commit_msg):
+            return RESULT_SUCCESS
 
     if not args.strict:
         if format.has_autosquash_prefix(commit_msg):
