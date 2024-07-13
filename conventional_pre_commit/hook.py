@@ -34,6 +34,12 @@ def main(argv=[]):
         action="store_true",
         help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
     )
+    parser.add_argument(
+        "--skip-merge-commits",
+        action="store_true",
+        dest="skip_merge_commits",
+        help="Do not check format for merge commits.",
+    )
 
     if len(argv) < 1:
         argv = sys.argv[1:]
@@ -61,6 +67,10 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         scopes = args.scopes.split(",")
     else:
         scopes = args.scopes
+
+    if args.skip_merge_commits:
+        if format.is_merge_commit(message):
+            return RESULT_SUCCESS
 
     if not args.strict:
         if format.has_autosquash_prefix(message):
