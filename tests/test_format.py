@@ -209,7 +209,7 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some hunk header
  Context 1
- 
+
  Context 2
 +Added line
 """
@@ -243,7 +243,7 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some staged hunk header
  Staged Context 1
- 
+
  Staged Context 2
 +Staged added line
 # --------------------------------------------------
@@ -258,9 +258,9 @@ index fe8a527..1c00c14 100644
  Context 3
 -Removed line
 +Added line
- 
+
  Context 4
- 
+
 """
 
     assert regex.search(input)
@@ -324,7 +324,7 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some hunk header
  Context 1
- 
+
  Context 2
 +Added line
 """
@@ -373,7 +373,7 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some staged hunk header
  Staged Context 1
- 
+
  Staged Context 2
 +Staged added line
 # --------------------------------------------------
@@ -388,9 +388,9 @@ index fe8a527..1c00c14 100644
  Context 3
 -Removed line
 +Added line
- 
+
  Context 4
- 
+
 """
 
     expected = """feat: some commit message
