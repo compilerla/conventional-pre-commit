@@ -67,13 +67,13 @@ def r_autosquash_prefixes():
     return "|".join(AUTOSQUASH_PREFIXES)
 
 
-def r_verbose_diff():
+def r_verbose_commit_ignored():
     """Regex str for verbose diff"""
-    return r"(?P<diff>(^# -* >8 -*$\r?\n)(^# .*$\r?\n)+(diff ){1}(.*\r?\n)*)"
+    return r"^# -{24} >8 -{24}\r?\n(?:.*\r?\n)*.*"
 
 
-def strip_verbose_diff(input):
-    return re.sub(r_verbose_diff(), "", input, flags=re.MULTILINE)
+def strip_verbose_commit_ignored(input):
+    return re.sub(r_verbose_commit_ignored(), "", input, flags=re.MULTILINE)
 
 
 def r_comment():
@@ -99,7 +99,7 @@ def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, scopes: Opt
 
     Optionally provide a list of additional custom types.
     """
-    input = strip_verbose_diff(input)
+    input = strip_verbose_commit_ignored(input)
     input = strip_comments(input)
     types = conventional_types(types)
     pattern = f"^({r_types(types)}){r_scope(optional_scope, scopes=scopes)}{r_delim()}{r_subject()}{r_body()}"
