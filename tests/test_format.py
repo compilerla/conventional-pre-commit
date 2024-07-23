@@ -187,7 +187,8 @@ def test_r_verbose_commit_ignored__does_not_match_no_verbose():
 
 def test_r_verbose_commit_ignored__matches_single_verbose_ignored():
     regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
-    input = """feat: some commit message
+    input = (
+        """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 #
@@ -209,17 +210,21 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some hunk header
  Context 1
-
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
  Context 2
 +Added line
 """
+    )
 
     assert regex.search(input)
 
 
 def test_r_verbose_commit_ignored__matches_double_verbose_ignored():
     regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
-    input = """feat: some commit message
+    input = (
+        """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 #
@@ -243,7 +248,9 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some staged hunk header
  Staged Context 1
-
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
  Staged Context 2
 +Staged added line
 # --------------------------------------------------
@@ -258,10 +265,15 @@ index fe8a527..1c00c14 100644
  Context 3
 -Removed line
 +Added line
-
- Context 4
-
 """
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 4
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+"""
+    )
 
     assert regex.search(input)
 
@@ -302,7 +314,8 @@ def test_strip_verbose_commit_ignored__does_not_strip_no_verbose():
 
 
 def test_strip_verbose_commit_ignored__strips_single_verbose_ignored():
-    input = """feat: some commit message
+    input = (
+        """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 #
@@ -324,10 +337,13 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some hunk header
  Context 1
-
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
  Context 2
 +Added line
 """
+    )
 
     expected = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
@@ -349,7 +365,8 @@ index ea80a93..fe8a527 100644
 
 
 def test_strip_verbose_commit_ignored__strips_double_verbose_ignored():
-    input = """feat: some commit message
+    input = (
+        """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
 #
@@ -373,7 +390,9 @@ index ea80a93..fe8a527 100644
 +++ i/README.md
 @@ -20,3 +20,4 @@ Some staged hunk header
  Staged Context 1
-
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
  Staged Context 2
 +Staged added line
 # --------------------------------------------------
@@ -388,10 +407,15 @@ index fe8a527..1c00c14 100644
  Context 3
 -Removed line
 +Added line
-
- Context 4
-
 """
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 4
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+"""
+    )
 
     expected = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
