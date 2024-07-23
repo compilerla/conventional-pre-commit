@@ -68,11 +68,12 @@ def r_autosquash_prefixes():
 
 
 def r_verbose_commit_ignored():
-    """Regex str for verbose diff"""
+    """Regex str for the ignored part of verbose commit message templates"""
     return r"^# -{24} >8 -{24}\r?\n.*\Z"
 
 
 def strip_verbose_commit_ignored(input):
+    """Strip the ignored part of verbose commit message templates."""
     return re.sub(r_verbose_commit_ignored(), "", input, flags=re.DOTALL | re.MULTILINE)
 
 
