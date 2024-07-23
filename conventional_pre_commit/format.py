@@ -69,11 +69,11 @@ def r_autosquash_prefixes():
 
 def r_verbose_commit_ignored():
     """Regex str for verbose diff"""
-    return r"^# -{24} >8 -{24}\r?\n(?:.*\r?\n)*.*"
+    return r"^# -{24} >8 -{24}\r?\n.*\Z"
 
 
 def strip_verbose_commit_ignored(input):
-    return re.sub(r_verbose_commit_ignored(), "", input, flags=re.MULTILINE)
+    return re.sub(r_verbose_commit_ignored(), "", input, flags=re.DOTALL | re.MULTILINE)
 
 
 def r_comment():

@@ -166,7 +166,7 @@ def test_strip_comments__spaced():
 
 
 def test_r_verbose_commit_ignored__does_not_match_no_verbose():
-    regex = re.compile(format.r_verbose_commit_ignored(), re.MULTILINE)
+    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
     input = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
@@ -186,7 +186,7 @@ def test_r_verbose_commit_ignored__does_not_match_no_verbose():
 
 
 def test_r_verbose_commit_ignored__matches_single_verbose_ignored():
-    regex = re.compile(format.r_verbose_commit_ignored(), re.MULTILINE)
+    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
     input = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
@@ -218,7 +218,7 @@ index ea80a93..fe8a527 100644
 
 
 def test_r_verbose_commit_ignored__matches_double_verbose_ignored():
-    regex = re.compile(format.r_verbose_commit_ignored(), re.MULTILINE)
+    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
     input = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
