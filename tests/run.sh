@@ -7,5 +7,5 @@ coverage run -m pytest
 # clean out old coverage results
 rm -rf ./tests/coverage
 
-# regenerate coverate report
+# regenerate coverage report
 coverage html --directory ./tests/coverage

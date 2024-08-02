@@ -165,71 +165,275 @@ def test_strip_comments__spaced():
     assert result.strip() == "feat(scope): message"
 
 
-def test_r_verbose_diff__has_diff():
-    regex = re.compile(format.r_verbose_diff(), re.MULTILINE)
-    input = """# ----------- >8 -----------
-# Some comment
-# Some comment
-diff --git a/file b/file
+def test_r_verbose_commit_ignored__does_not_match_no_verbose():
+    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
+    input = """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
 """
 
-    assert regex.match(input)
+    assert not regex.search(input)
 
 
-def test_r_verbose_diff__no_diff():
-    regex = re.compile(format.r_verbose_diff(), re.MULTILINE)
-    input = """# ----------- >8 -----------
-# Some comment
-# Some comment
+def test_r_verbose_commit_ignored__matches_single_verbose_ignored():
+    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
+    input = (
+        """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git c/README.md i/README.md
+index ea80a93..fe8a527 100644
+--- c/README.md
++++ i/README.md
+@@ -20,3 +20,4 @@ Some hunk header
+ Context 1
 """
-
-    assert not regex.match(input)
-
-
-def test_r_verbose_diff__no_extra_comments():
-    regex = re.compile(format.r_verbose_diff(), re.MULTILINE)
-    input = """# ----------- >8 -----------
-diff --git a/file b/file
-"""
-
-    assert not regex.match(input)
-
-
-def test_strip_verbose_diff__has_diff():
-    input = """feat(scope): message
-# Please enter the commit message for your changes.
-
-# These are comments usually added by editors, f.ex. with export EDITOR=vim
-# ----------- >8 -----------
-# Some comment
-# Some comment
-diff --git a/file b/file
-"""
-
-    result = format.strip_verbose_diff(input)
-    assert result.count("\n") == 4
-    assert (
-        result
-        == """feat(scope): message
-# Please enter the commit message for your changes.
-
-# These are comments usually added by editors, f.ex. with export EDITOR=vim
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 2
++Added line
 """
     )
 
+    assert regex.search(input)
 
-def test_strip_verbose_diff__no_diff():
-    input = """feat(scope): message
-# Please enter the commit message for your changes.
 
-# These are comments usually added by editors, f.ex. with export EDITOR=vim
-# ----------- >8 -----------
-# Some comment
-# Some comment
+def test_r_verbose_commit_ignored__matches_double_verbose_ignored():
+    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
+    input = (
+        """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+#
+# Changes to be committed:
+diff --git c/README.md i/README.md
+index ea80a93..fe8a527 100644
+--- c/README.md
++++ i/README.md
+@@ -20,3 +20,4 @@ Some staged hunk header
+ Staged Context 1
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Staged Context 2
++Staged added line
+# --------------------------------------------------
+# Changes not staged for commit:
+diff --git i/README.md w/README.md
+index fe8a527..1c00c14 100644
+--- i/README.md
++++ w/README.md
+@@ -10,6 +10,7 @@ Some unstaged hunk header
+ Context 1
+ Context 2
+ Context 3
+-Removed line
++Added line
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 4
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+"""
+    )
+
+    assert regex.search(input)
+
+
+def test_strip_verbose_commit_ignored__does_not_strip_no_verbose():
+    input = """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
 """
 
-    result = format.strip_verbose_diff(input)
-    assert result == input
+    expected = """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+"""
+
+    result = format.strip_verbose_commit_ignored(input)
+    assert result == expected
+
+
+def test_strip_verbose_commit_ignored__strips_single_verbose_ignored():
+    input = (
+        """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git c/README.md i/README.md
+index ea80a93..fe8a527 100644
+--- c/README.md
++++ i/README.md
+@@ -20,3 +20,4 @@ Some hunk header
+ Context 1
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 2
++Added line
+"""
+    )
+
+    expected = """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+"""
+
+    result = format.strip_verbose_commit_ignored(input)
+    assert result == expected
+
+
+def test_strip_verbose_commit_ignored__strips_double_verbose_ignored():
+    input = (
+        """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+#
+# Changes to be committed:
+diff --git c/README.md i/README.md
+index ea80a93..fe8a527 100644
+--- c/README.md
++++ i/README.md
+@@ -20,3 +20,4 @@ Some staged hunk header
+ Staged Context 1
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Staged Context 2
++Staged added line
+# --------------------------------------------------
+# Changes not staged for commit:
+diff --git i/README.md w/README.md
+index fe8a527..1c00c14 100644
+--- i/README.md
++++ w/README.md
+@@ -10,6 +10,7 @@ Some unstaged hunk header
+ Context 1
+ Context 2
+ Context 3
+-Removed line
++Added line
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 4
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+"""
+    )
+
+    expected = """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+"""
+
+    result = format.strip_verbose_commit_ignored(input)
+    assert result == expected
 
 
 @pytest.mark.parametrize("type", format.DEFAULT_TYPES)
