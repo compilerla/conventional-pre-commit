@@ -152,6 +152,37 @@ def test_subprocess_fail__conventional_with_multiple_scopes(cmd, conventional_co
     assert result == RESULT_FAIL
 
 
+def test_main_success__custom_scopes_optional_scope(conventional_commit_path):
+    result = main(["--scopes", "api,client", conventional_commit_path])
+    assert result == RESULT_SUCCESS
+
+
+def test_main_success__custom_scopes_with_allowed_scope(conventional_commit_with_multiple_scopes_path):
+    result = main(["--scopes", "chore,api,client", conventional_commit_with_multiple_scopes_path])
+    assert result == RESULT_SUCCESS
+
+
+def test_main_fail__custom_scopes_with_disallowed_scope(conventional_commit_with_scope_path):
+    result = main(["--scopes", "api,client", conventional_commit_with_scope_path])
+    assert result == RESULT_FAIL
+
+
+def test_main_fail__custom_scopes_require_scope_no_scope(conventional_commit_path):
+    result = main(["--scopes", "chore,feat,fix,custom", "--force-scope", conventional_commit_path])
+    assert result == RESULT_FAIL
+
+
+def test_main_success__custom_scopes_require_scope_with_allowed_scope(conventional_commit_with_scope_path):
+    result = main(["--scopes", "api,client,scope", "--force-scope", conventional_commit_with_scope_path])
+    assert result == RESULT_SUCCESS
+
+
+def test_main_fail__custom_scopes_require_scope_with_disallowed_scope(conventional_commit_with_scope_path):
+    result = main(
+        ["--scopes", "api,client", "--force-scope", conventional_commit_with_scope_path])
+    assert result == RESULT_FAIL
+
+
 def test_subprocess_success__fixup_commit(cmd, fixup_commit_path):
     result = subprocess.call((cmd, fixup_commit_path))
 

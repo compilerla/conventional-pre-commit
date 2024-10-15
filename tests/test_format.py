@@ -66,7 +66,7 @@ def test_r_scope__special_chars():
 
 def test_r_scope__scopes():
     scopes_input = ["api", "client"]
-    result = format.r_scope(scopes=scopes_input)
+    result = format.r_scope(scopes=scopes_input, optional=False)
     regex = re.compile(result)
     assert regex.match("(api)")
     assert regex.match("(client)")

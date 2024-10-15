@@ -39,7 +39,10 @@ def r_scope(optional=True, scopes: Optional[List[str]] = None):
 
     if scopes:
         scopes_pattern = _get_scope_pattern(scopes)
-        return scopes_pattern
+        if optional:
+            return f"(?:{scopes_pattern})?"
+        else:
+            return scopes_pattern
 
     if optional:
         return r"(\([\w \/:,-]+\))?"
