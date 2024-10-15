@@ -36,16 +36,6 @@ jobs:
       - name: Build package
         run: python -m build
 
-      - name: Release
-        id: release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            ./dist/*.whl
-            ./dist/*.tar.gz
-          prerelease: ${{ contains(github.ref, '-pre') }}
-          generate_release_notes: ${{ !contains(github.ref, '-pre') }}
-
       - name: Publish to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: ${{ contains(github.ref, '-pre') }}
@@ -60,3 +50,13 @@ jobs:
         if: ${{ !contains(github.ref, '-pre') }}
         with:
           print-hash: true
+
+      - name: Release
+        id: release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ./dist/*.whl
+            ./dist/*.tar.gz
+          prerelease: ${{ contains(github.ref, '-pre') }}
+          generate_release_notes: ${{ !contains(github.ref, '-pre') }}
