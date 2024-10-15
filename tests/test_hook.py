@@ -178,8 +178,7 @@ def test_main_success__custom_scopes_require_scope_with_allowed_scope(convention
 
 
 def test_main_fail__custom_scopes_require_scope_with_disallowed_scope(conventional_commit_with_scope_path):
-    result = main(
-        ["--scopes", "api,client", "--force-scope", conventional_commit_with_scope_path])
+    result = main(["--scopes", "api,client", "--force-scope", conventional_commit_with_scope_path])
     assert result == RESULT_FAIL
 
 
