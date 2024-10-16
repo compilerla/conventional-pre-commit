@@ -75,6 +75,10 @@ See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.RESTOR
         {Colors.YELLOW}Your commit message does not follow Conventional Commits formatting
         {Colors.LBLUE}https://www.conventionalcommits.org/{Colors.YELLOW}
 
+        Run
+            git commit --edit --file=.git/COMMIT_EDITMSG
+        to reedit the commit message do the commit.
+
         Conventional Commits start with one of the below types, followed by a colon,
         followed by the commit subject and an optional body seperated by a blank line:{Colors.RESTORE}
 
