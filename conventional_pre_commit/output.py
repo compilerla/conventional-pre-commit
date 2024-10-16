@@ -1,4 +1,7 @@
 import os
+from typing import List, Optional
+
+from conventional_pre_commit import format
 
 
 class Colors:
@@ -25,15 +28,50 @@ def verbose_arg():
     return os.linesep.join(lines)
 
 
-def fail_verbose(commit_msg):
+def fail_verbose(commit_msg: str, types=format.DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None):
+    match = format.conventional_match(commit_msg, types, optional_scope, scopes)
     lines = [
         "",
-        f"{Colors.YELLOW}Run{Colors.RESTORE}",
+        f"{Colors.YELLOW}Conventional Commit messages follow a pattern like:",
         "",
-        "    git commit --edit --file=.git/COMMIT_EDITMSG",
+        f"{Colors.RESTORE}    type(scope): subject",
         "",
-        f"{Colors.YELLOW}to edit the commit message and retry the commit.{Colors.RESTORE}",
+        "    extended body",
+        "",
     ]
+
+    groups = match.groupdict() if match else {}
+
+    if optional_scope:
+        groups.pop("scope", None)
+
+    if not groups.get("body"):
+        groups.pop("body", None)
+        groups.pop("multi", None)
+        groups.pop("sep", None)
+
+    if groups.keys():
+        lines.append(f"{Colors.YELLOW}Please correct the following errors:{Colors.RESTORE}")
+        lines.append("")
+        for group in [g for g, v in groups.items() if not v]:
+            if group == "scope":
+                if scopes:
+                    lines.append(f"  - Expected value for 'scope' from: {','.join(scopes)}")
+                else:
+                    lines.append("  - Expected value for 'scope' but found none.")
+            else:
+                lines.append(f"  - Expected value for '{group}' but found none.")
+
+    lines.extend(
+        [
+            "",
+            f"{Colors.YELLOW}Run:{Colors.RESTORE}",
+            "",
+            "    git commit --edit --file=.git/COMMIT_EDITMSG",
+            "",
+            f"{Colors.YELLOW}to edit the commit message and retry the commit.{Colors.RESTORE}",
+        ]
+    )
     return os.linesep.join(lines)
 
 
