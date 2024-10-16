@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 import pytest
@@ -92,6 +93,24 @@ def test_main_fail__conventional_commit_bad_multi_line(conventional_commit_bad_m
     result = main([conventional_commit_bad_multi_line_path])
 
     assert result == RESULT_FAIL
+
+
+def test_main_fail__verbose(bad_commit_path, capsys):
+    result = main(["--verbose", "--force-scope", bad_commit_path])
+
+    assert result == RESULT_FAIL
+
+    captured = capsys.readouterr()
+    output = captured.out
+
+    assert "Conventional Commit messages follow a pattern like" in output
+    assert f"type(scope): subject{os.linesep}{os.linesep}    extended body" in output
+    assert "Expected value for 'type' but found none." in output
+    assert "Expected value for 'delim' but found none." in output
+    assert "Expected value for 'scope' but found none." in output
+    assert "Expected value for 'subject' but found none." in output
+    assert "git commit --edit --file=.git/COMMIT_EDITMSG" in output
+    assert "edit the commit message and retry the commit" in output
 
 
 def test_subprocess_fail__missing_args(cmd):

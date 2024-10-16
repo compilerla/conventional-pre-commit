@@ -27,6 +27,13 @@ def main(argv=[]):
         action="store_true",
         help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
     )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        dest="verbose",
+        default=False,
+        help="Print more verbose error output.",
+    )
 
     if len(argv) < 1:
         argv = sys.argv[1:]
@@ -53,8 +60,13 @@ def main(argv=[]):
 
     if format.is_conventional(commit_msg, args.types, args.optional_scope, scopes):
         return RESULT_SUCCESS
+
+    print(output.fail(commit_msg))
+
+    if not args.verbose:
+        print(output.verbose_arg())
     else:
-        print(output.fail(commit_msg))
+        print(output.fail_verbose(commit_msg, args.types, args.optional_scope, scopes))
 
     return RESULT_FAIL
 

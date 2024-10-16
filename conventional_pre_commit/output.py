@@ -13,6 +13,12 @@ def fail(commit_msg):
         f"{Colors.LRED}[Bad commit message] >>{Colors.RESTORE} {commit_msg}"
         f"{Colors.YELLOW}Your commit message does not follow Conventional Commits formatting{Colors.RESTORE}",
         f"{Colors.LBLUE}https://www.conventionalcommits.org/{Colors.RESTORE}",
+    ]
+    return os.linesep.join(lines)
+
+
+def verbose_arg():
+    lines = [
         "",
         f"{Colors.YELLOW}Use the {Colors.RESTORE}--verbose{Colors.YELLOW} arg for more information{Colors.RESTORE}",
     ]
