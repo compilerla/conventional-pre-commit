@@ -46,33 +46,43 @@ Conventional Commit......................................................Failed
 - duration: 0.07s
 - exit code: 1
 
-[Bad Commit message] >> add a new feature
+[Bad commit message] >> add a new feature
+Your commit message does not follow Conventional Commits formatting
+https://www.conventionalcommits.org/
+```
 
+And with the `--verbose` arg:
+
+```console
+$ git commit -m "add a new feature"
+
+[INFO] Initializing environment for ....
+Conventional Commit......................................................Failed
+- hook id: conventional-pre-commit
+- duration: 0.07s
+- exit code: 1
+
+[Bad commit message] >> add a new feature
 Your commit message does not follow Conventional Commits formatting
 https://www.conventionalcommits.org/
 
-Conventional Commits start with one of the below types, followed by a colon,
-followed by the commit message:
+Conventional Commit messages follow a pattern like:
 
-    build chore ci docs feat fix perf refactor revert style test
+    type(scope): subject
 
-Example commit message adding a feature:
+    extended body
 
-    feat: implement new API
+Please correct the following errors:
 
-Example commit message fixing an issue:
+  - Expected value for 'type' but found none.
+  - Expected value for 'delim' but found none.
+  - Expected value for 'subject' but found none.
 
-    fix: remove infinite loop
+Run:
 
-Example commit with scope in parentheses after the type for more context:
+    git commit --edit --file=.git/COMMIT_EDITMSG
 
-    fix(account): remove infinite loop
-
-Example commit with a body:
-
-    fix: remove infinite loop
-
-    Additional information on the issue caused by the infinite loop
+to edit the commit message and retry the commit.
 ```
 
 Make a (conventional) commit :heavy_check_mark::
@@ -129,7 +139,7 @@ print(is_conventional("custom: this is a conventional commit", types=["custom"])
 
 ```shell
 $ conventional-pre-commit -h
-usage: conventional-pre-commit [-h] [--force-scope] [--scopes SCOPES] [--strict] [types ...] input
+usage: conventional-pre-commit [-h] [--no-color] [--force-scope] [--scopes SCOPES] [--strict] [--verbose] [types ...] input
 
 Check a git commit message for Conventional Commits formatting.
 
@@ -139,9 +149,11 @@ positional arguments:
 
 options:
   -h, --help       show this help message and exit
+  --no-color       Disable color in output.
   --force-scope    Force commit to have scope defined.
   --scopes SCOPES  Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)
   --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
+  --verbose        Print more verbose error output.
 ```
 
 Supply arguments on the command-line, or via the pre-commit `hooks.args` property:
