@@ -96,22 +96,52 @@ def conventional_types(types=[]):
     return types
 
 
-def is_conventional(input, types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None):
+def conventional_regex(types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None):
+    types = conventional_types(types)
+
+    types_pattern = f"^(?P<type>{r_types(types)})?"
+    scope_pattern = f"(?P<scope>{r_scope(optional_scope, scopes=scopes)})?"
+    delim_pattern = f"(?P<delim>{r_delim()})?"
+    subject_pattern = f"(?P<subject>{r_subject()})?"
+    body_pattern = f"(?P<body>{r_body()})?"
+    pattern = types_pattern + scope_pattern + delim_pattern + subject_pattern + body_pattern
+
+    return re.compile(pattern, re.MULTILINE)
+
+
+def clean_input(input: str):
+    """
+    Prepares an input message for conventional commits format check.
+    """
+    input = strip_verbose_commit_ignored(input)
+    input = strip_comments(input)
+    return input
+
+
+def conventional_match(input: str, types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None):
+    """
+    Returns an `re.Match` object for the input against the Conventional Commits format.
+    """
+    input = clean_input(input)
+    regex = conventional_regex(types, optional_scope, scopes)
+    return regex.match(input)
+
+
+def is_conventional(input: str, types=DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None) -> bool:
     """
     Returns True if input matches Conventional Commits formatting
     https://www.conventionalcommits.org
 
     Optionally provide a list of additional custom types.
     """
-    input = strip_verbose_commit_ignored(input)
-    input = strip_comments(input)
-    types = conventional_types(types)
-    pattern = f"^({r_types(types)}){r_scope(optional_scope, scopes=scopes)}{r_delim()}{r_subject()}{r_body()}"
-    regex = re.compile(pattern, re.MULTILINE)
-
-    result = regex.match(input)
+    result = conventional_match(input, types, optional_scope, scopes)
     is_valid = bool(result)
-    if is_valid and result.group("multi") and not result.group("sep"):
+
+    if result and result.group("multi") and not result.group("sep"):
+        is_valid = False
+    if result and not all(
+        [result.group("type"), optional_scope or result.group("scope"), result.group("delim"), result.group("subject")]
+    ):
         is_valid = False
 
     return is_valid

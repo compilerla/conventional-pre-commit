@@ -436,6 +436,34 @@ index fe8a527..1c00c14 100644
     assert result == expected
 
 
+def test_conventional_regex():
+    regex = format.conventional_regex()
+
+    assert isinstance(regex, re.Pattern)
+    assert "type" in regex.groupindex
+    assert "scope" in regex.groupindex
+    assert "delim" in regex.groupindex
+    assert "subject" in regex.groupindex
+    assert "body" in regex.groupindex
+    assert "multi" in regex.groupindex
+    assert "sep" in regex.groupindex
+
+
+def test_conventional_match():
+    match = format.conventional_match(
+        """test(scope): subject line
+
+body copy
+"""
+    )
+    assert match
+    assert match.group("type") == "test"
+    assert match.group("scope") == "(scope)"
+    assert match.group("delim") == ":"
+    assert match.group("subject").strip() == "subject line"
+    assert match.group("body").strip() == "body copy"
+
+
 @pytest.mark.parametrize("type", format.DEFAULT_TYPES)
 def test_is_conventional__default_type(type):
     input = f"{type}: message"
