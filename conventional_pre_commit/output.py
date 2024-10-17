@@ -10,31 +10,55 @@ class Colors:
     RESTORE = "\033[0m"
     YELLOW = "\033[00;33m"
 
+    def __init__(self, enabled=True):
+        self.enabled = enabled
 
-def fail(commit_msg):
+    @property
+    def blue(self):
+        return self.LBLUE if self.enabled else ""
+
+    @property
+    def red(self):
+        return self.LRED if self.enabled else ""
+
+    @property
+    def restore(self):
+        return self.RESTORE if self.enabled else ""
+
+    @property
+    def yellow(self):
+        return self.YELLOW if self.enabled else ""
+
+
+def fail(commit_msg, use_color=True):
+    c = Colors(use_color)
     lines = [
-        f"{Colors.LRED}[Bad commit message] >>{Colors.RESTORE} {commit_msg}"
-        f"{Colors.YELLOW}Your commit message does not follow Conventional Commits formatting{Colors.RESTORE}",
-        f"{Colors.LBLUE}https://www.conventionalcommits.org/{Colors.RESTORE}",
+        f"{c.red}[Bad commit message] >>{c.restore} {commit_msg}"
+        f"{c.yellow}Your commit message does not follow Conventional Commits formatting{c.restore}",
+        f"{c.blue}https://www.conventionalcommits.org/{c.restore}",
     ]
     return os.linesep.join(lines)
 
 
-def verbose_arg():
+def verbose_arg(use_color=True):
+    c = Colors(use_color)
     lines = [
         "",
-        f"{Colors.YELLOW}Use the {Colors.RESTORE}--verbose{Colors.YELLOW} arg for more information{Colors.RESTORE}",
+        f"{c.yellow}Use the {c.restore}--verbose{c.yellow} arg for more information{c.restore}",
     ]
     return os.linesep.join(lines)
 
 
-def fail_verbose(commit_msg: str, types=format.DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None):
+def fail_verbose(
+    commit_msg: str, types=format.DEFAULT_TYPES, optional_scope=True, scopes: Optional[List[str]] = None, use_color=True
+):
+    c = Colors(use_color)
     match = format.conventional_match(commit_msg, types, optional_scope, scopes)
     lines = [
         "",
-        f"{Colors.YELLOW}Conventional Commit messages follow a pattern like:",
+        f"{c.yellow}Conventional Commit messages follow a pattern like:",
         "",
-        f"{Colors.RESTORE}    type(scope): subject",
+        f"{c.restore}    type(scope): subject",
         "",
         "    extended body",
         "",
@@ -51,35 +75,37 @@ def fail_verbose(commit_msg: str, types=format.DEFAULT_TYPES, optional_scope=Tru
         groups.pop("sep", None)
 
     if groups.keys():
-        lines.append(f"{Colors.YELLOW}Please correct the following errors:{Colors.RESTORE}")
+        lines.append(f"{c.yellow}Please correct the following errors:{c.restore}")
         lines.append("")
         for group in [g for g, v in groups.items() if not v]:
             if group == "scope":
                 if scopes:
-                    lines.append(f"  - Expected value for 'scope' from: {','.join(scopes)}")
+                    scopt_opts = f"{c.yellow},{c.restore}".join(scopes)
+                    lines.append(f"{c.yellow}  - Expected value for {c.restore}scope{c.yellow} from: {c.restore}{scopt_opts}")
                 else:
-                    lines.append("  - Expected value for 'scope' but found none.")
+                    lines.append(f"{c.yellow}  - Expected value for {c.restore}scope{c.yellow} but found none.{c.restore}")
             else:
-                lines.append(f"  - Expected value for '{group}' but found none.")
+                lines.append(f"{c.yellow}  - Expected value for {c.restore}{group}{c.yellow} but found none.{c.restore}")
 
     lines.extend(
         [
             "",
-            f"{Colors.YELLOW}Run:{Colors.RESTORE}",
+            f"{c.yellow}Run:{c.restore}",
             "",
             "    git commit --edit --file=.git/COMMIT_EDITMSG",
             "",
-            f"{Colors.YELLOW}to edit the commit message and retry the commit.{Colors.RESTORE}",
+            f"{c.yellow}to edit the commit message and retry the commit.{c.restore}",
         ]
     )
     return os.linesep.join(lines)
 
 
-def unicode_decode_error():
+def unicode_decode_error(use_color=True):
+    c = Colors(use_color)
     return f"""
-{Colors.LRED}[Bad commit message encoding]{Colors.RESTORE}
+{c.red}[Bad commit message encoding]{c.restore}
 
-{Colors.YELLOW}conventional-pre-commit couldn't decode your commit message.
+{c.yellow}conventional-pre-commit couldn't decode your commit message.
 UTF-8 encoding is assumed, please configure git to write commit messages in UTF-8.
-See {Colors.LBLUE}https://git-scm.com/docs/git-commit/#_discussion{Colors.YELLOW} for more.{Colors.RESTORE}
+See {c.blue}https://git-scm.com/docs/git-commit/#_discussion{c.yellow} for more.{c.restore}
 """
