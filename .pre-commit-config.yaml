@@ -51,3 +51,4 @@ repos:
         entry: conventional-pre-commit
         language: python
         stages: [commit-msg]
+        args: [--verbose]

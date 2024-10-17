@@ -1,8 +1,10 @@
+import os
 import subprocess
 
 import pytest
 
 from conventional_pre_commit.hook import RESULT_FAIL, RESULT_SUCCESS, main
+from conventional_pre_commit.output import Colors
 
 
 @pytest.fixture
@@ -92,6 +94,38 @@ def test_main_fail__conventional_commit_bad_multi_line(conventional_commit_bad_m
     result = main([conventional_commit_bad_multi_line_path])
 
     assert result == RESULT_FAIL
+
+
+def test_main_fail__verbose(bad_commit_path, capsys):
+    result = main(["--verbose", "--force-scope", bad_commit_path])
+
+    assert result == RESULT_FAIL
+
+    captured = capsys.readouterr()
+    output = captured.out
+
+    assert Colors.LBLUE in output
+    assert Colors.LRED in output
+    assert Colors.RESTORE in output
+    assert Colors.YELLOW in output
+    assert "Conventional Commit messages follow a pattern like" in output
+    assert f"type(scope): subject{os.linesep}{os.linesep}    extended body" in output
+    assert "git commit --edit --file=.git/COMMIT_EDITMSG" in output
+    assert "edit the commit message and retry the commit" in output
+
+
+def test_main_fail__no_color(bad_commit_path, capsys):
+    result = main(["--verbose", "--no-color", bad_commit_path])
+
+    assert result == RESULT_FAIL
+
+    captured = capsys.readouterr()
+    output = captured.out
+
+    assert Colors.LBLUE not in output
+    assert Colors.LRED not in output
+    assert Colors.RESTORE not in output
+    assert Colors.YELLOW not in output
 
 
 def test_subprocess_fail__missing_args(cmd):
