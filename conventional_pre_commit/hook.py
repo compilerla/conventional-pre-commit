@@ -13,6 +13,7 @@ def main(argv=[]):
     )
     parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
     parser.add_argument("input", type=str, help="A file containing a git commit message")
+    parser.add_argument("--no-color", action="store_false", default=True, dest="color", help="Disable color in output.")
     parser.add_argument(
         "--force-scope", action="store_false", default=True, dest="optional_scope", help="Force commit to have scope defined."
     )
@@ -47,7 +48,7 @@ def main(argv=[]):
         with open(args.input, encoding="utf-8") as f:
             commit_msg = f.read()
     except UnicodeDecodeError:
-        print(output.unicode_decode_error())
+        print(output.unicode_decode_error(args.color))
         return RESULT_FAIL
     if args.scopes:
         scopes = args.scopes.split(",")
@@ -61,12 +62,16 @@ def main(argv=[]):
     if format.is_conventional(commit_msg, args.types, args.optional_scope, scopes):
         return RESULT_SUCCESS
 
-    print(output.fail(commit_msg))
+    print(output.fail(commit_msg, use_color=args.color))
 
     if not args.verbose:
-        print(output.verbose_arg())
+        print(output.verbose_arg(use_color=args.color))
     else:
-        print(output.fail_verbose(commit_msg, args.types, args.optional_scope, scopes))
+        print(
+            output.fail_verbose(
+                commit_msg, types=args.types, optional_scope=args.optional_scope, scopes=scopes, use_color=args.color
+            )
+        )
 
     return RESULT_FAIL
 
