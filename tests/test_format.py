@@ -2,173 +2,109 @@ import re
 
 import pytest
 
-from conventional_pre_commit import format
+from conventional_pre_commit.format import Commit, ConventionalCommit, is_conventional
 
 CUSTOM_TYPES = ["one", "two"]
 
 
-def test_r_types():
-    result = format.r_types(CUSTOM_TYPES)
+@pytest.fixture
+def commit() -> Commit:
+    return Commit()
+
+
+@pytest.fixture
+def conventional_commit() -> ConventionalCommit:
+    return ConventionalCommit()
+
+
+@pytest.fixture
+def conventional_commit_scope_required(conventional_commit) -> ConventionalCommit:
+    conventional_commit.scope_optional = False
+    return conventional_commit
+
+
+def test_commit_init():
+    input = (
+        """feat: some commit message
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# On branch main
+# Your branch is up to date with 'origin/main'.
+#
+# Changes to be committed:
+#	modified:   README.md
+#
+# Changes not staged for commit:
+#	modified:   README.md
+#
+# ------------------------ >8 ------------------------
+# Do not modify or remove the line above.
+# Everything below it will be ignored.
+diff --git c/README.md i/README.md
+index ea80a93..fe8a527 100644
+--- c/README.md
++++ i/README.md
+@@ -20,3 +20,4 @@ Some hunk header
+ Context 1
+"""
+        + " "  # This is on purpose to preserve the space from overly eager stripping.
+        + """
+ Context 2
++Added line
+"""
+    )
+
+    expected = "feat: some commit message\n"
+
+    assert Commit(input).message == expected
+
+
+def test_r_or(commit):
+    result = commit._r_or(CUSTOM_TYPES)
     regex = re.compile(result)
 
-    assert regex.match("one")
-    assert regex.match("two")
+    for item in CUSTOM_TYPES:
+        assert regex.match(item)
 
 
-def test_r_scope__optional():
-    result = format.r_scope()
-    regex = re.compile(result)
+def test_r_autosquash_prefixes(commit):
+    regex = re.compile(commit.r_autosquash_prefixes)
 
-    assert regex.match("")
-
-
-def test_r_scope__not_optional():
-    result = format.r_scope(optional=False)
-    regex = re.compile(result)
-
-    # Assert not optional anymore
-    assert not regex.match("")
-
-
-def test_r_scope__parenthesis_required():
-    result = format.r_scope()
-    regex = re.compile(result)
-
-    # without parens produces a match object with a 0 span
-    # since the (scope) is optional
-    without_parens = regex.match("something")
-    assert without_parens.span() == (0, 0)
-
-    # with parens produces a match object with a span
-    # that covers the input string
-    with_parens = regex.match("(something)")
-    assert with_parens.span() == (0, 11)
-
-
-def test_r_scope__alphanumeric():
-    result = format.r_scope()
-    regex = re.compile(result)
-
-    assert regex.match("(50m3t41N6)")
-
-
-def test_r_scope__special_chars():
-    result = format.r_scope()
-    regex = re.compile(result)
-
-    assert regex.match("(some-thing)")
-    assert regex.match("(some_thing)")
-    assert regex.match("(some/thing)")
-    assert regex.match("(some thing)")
-    assert regex.match("(some:thing)")
-    assert regex.match("(some,thing)")
-
-
-def test_r_scope__scopes():
-    scopes_input = ["api", "client"]
-    result = format.r_scope(scopes=scopes_input, optional=False)
-    regex = re.compile(result)
-    assert regex.match("(api)")
-    assert regex.match("(client)")
-    assert regex.match("(api, client)")
-    assert regex.match("(api: client)")
-    assert regex.match("(api/client)")
-    assert regex.match("(api-client)")
-    assert not regex.match("(test)")
-    assert not regex.match("(api; client)")
-
-
-def test_r_delim():
-    result = format.r_delim()
-    regex = re.compile(result)
-
-    assert regex.match(":")
-
-
-def test_r_delim__optional_breaking_indicator():
-    result = format.r_delim()
-    regex = re.compile(result)
-
-    assert regex.match("!:")
-
-
-def test_r_subject__starts_with_space():
-    result = format.r_subject()
-    regex = re.compile(result)
-
-    assert not regex.match("something")
-    assert regex.match(" something")
-
-
-def test_r_subject__alphanumeric():
-    result = format.r_subject()
-    regex = re.compile(result)
-
-    assert regex.match(" 50m3t41N6")
-
-
-def test_r_subject__special_chars():
-    result = format.r_subject()
-    regex = re.compile(result)
-
-    assert regex.match(" some-thing")
-    assert regex.match(" some_thing")
-    assert regex.match(" some/thing")
-    assert regex.match(" some thing")
-
-
-def test_r_autosquash_prefixes():
-    result = format.r_autosquash_prefixes()
-    regex = re.compile(result)
-
-    for prefix in format.AUTOSQUASH_PREFIXES:
+    for prefix in commit.AUTOSQUASH_PREFIXES:
         assert regex.match(prefix)
 
-def test_merge_commit():
-    assert format.is_merge_commit("Merge branch '2.x.x' into '1.x.x'")
 
-def test_conventional_types__default():
-    result = format.conventional_types()
-
-    assert result == format.CONVENTIONAL_TYPES
-
-
-def test_conventional_types__custom():
-    result = format.conventional_types(["custom"])
-
-    assert set(["custom", *format.CONVENTIONAL_TYPES]) == set(result)
-
-
-def test_r_comment_single():
-    regex = re.compile(format.r_comment())
+def test_r_comment_single(commit):
+    regex = re.compile(commit.r_comment)
     assert regex.match("# Some comment")
     assert not regex.match("Some comment")
     assert not regex.match(" # Some comment")
 
 
-def test_strip_comments__consecutive():
+def test_strip_comments__consecutive(commit):
     input = """feat(scope): message
 # Please enter the commit message for your changes.
 # These are comments usually added by editors, f.ex. with export EDITOR=vim
     """
-    result = format.strip_comments(input)
+    result = commit._strip_comments(input)
     assert result.count("\n") == 1
     assert result.strip() == "feat(scope): message"
 
 
-def test_strip_comments__spaced():
+def test_strip_comments__spaced(commit):
     input = """feat(scope): message
 # Please enter the commit message for your changes.
 
 # These are comments usually added by editors, f.ex. with export EDITOR=vim
     """
-    result = format.strip_comments(input)
+    result = commit._strip_comments(input)
     assert result.count("\n") == 2
     assert result.strip() == "feat(scope): message"
 
 
-def test_r_verbose_commit_ignored__does_not_match_no_verbose():
-    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
+def test_r_verbose_commit_ignored__does_not_match_no_verbose(commit):
+    regex = re.compile(commit.r_verbose_commit_ignored, re.DOTALL | re.MULTILINE)
     input = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
@@ -187,8 +123,8 @@ def test_r_verbose_commit_ignored__does_not_match_no_verbose():
     assert not regex.search(input)
 
 
-def test_r_verbose_commit_ignored__matches_single_verbose_ignored():
-    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
+def test_r_verbose_commit_ignored__matches_single_verbose_ignored(commit):
+    regex = re.compile(commit.r_verbose_commit_ignored, re.DOTALL | re.MULTILINE)
     input = (
         """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
@@ -223,8 +159,8 @@ index ea80a93..fe8a527 100644
     assert regex.search(input)
 
 
-def test_r_verbose_commit_ignored__matches_double_verbose_ignored():
-    regex = re.compile(format.r_verbose_commit_ignored(), re.DOTALL | re.MULTILINE)
+def test_r_verbose_commit_ignored__matches_double_verbose_ignored(commit):
+    regex = re.compile(commit.r_verbose_commit_ignored, re.DOTALL | re.MULTILINE)
     input = (
         """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
@@ -280,7 +216,7 @@ index fe8a527..1c00c14 100644
     assert regex.search(input)
 
 
-def test_strip_verbose_commit_ignored__does_not_strip_no_verbose():
+def test_strip_verbose_commit_ignored__does_not_strip_no_verbose(commit):
     input = """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
 # with '#' will be ignored, and an empty message aborts the commit.
@@ -311,11 +247,11 @@ def test_strip_verbose_commit_ignored__does_not_strip_no_verbose():
 #
 """
 
-    result = format.strip_verbose_commit_ignored(input)
+    result = commit._strip_verbose_commit_ignored(input)
     assert result == expected
 
 
-def test_strip_verbose_commit_ignored__strips_single_verbose_ignored():
+def test_strip_verbose_commit_ignored__strips_single_verbose_ignored(commit):
     input = (
         """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
@@ -362,11 +298,11 @@ index ea80a93..fe8a527 100644
 #
 """
 
-    result = format.strip_verbose_commit_ignored(input)
+    result = commit._strip_verbose_commit_ignored(input)
     assert result == expected
 
 
-def test_strip_verbose_commit_ignored__strips_double_verbose_ignored():
+def test_strip_verbose_commit_ignored__strips_double_verbose_ignored(commit):
     input = (
         """feat: some commit message
 # Please enter the commit message for your changes. Lines starting
@@ -434,173 +370,12 @@ index fe8a527..1c00c14 100644
 #
 """
 
-    result = format.strip_verbose_commit_ignored(input)
+    result = commit._strip_verbose_commit_ignored(input)
     assert result == expected
 
 
-def test_conventional_regex():
-    regex = format.conventional_regex()
-
-    assert isinstance(regex, re.Pattern)
-    assert "type" in regex.groupindex
-    assert "scope" in regex.groupindex
-    assert "delim" in regex.groupindex
-    assert "subject" in regex.groupindex
-    assert "body" in regex.groupindex
-    assert "multi" in regex.groupindex
-    assert "sep" in regex.groupindex
-
-
-def test_conventional_match():
-    match = format.conventional_match(
-        """test(scope): subject line
-
-body copy
-"""
-    )
-    assert match
-    assert match.group("type") == "test"
-    assert match.group("scope") == "(scope)"
-    assert match.group("delim") == ":"
-    assert match.group("subject").strip() == "subject line"
-    assert match.group("body").strip() == "body copy"
-
-
-@pytest.mark.parametrize("type", format.DEFAULT_TYPES)
-def test_is_conventional__default_type(type):
-    input = f"{type}: message"
-
-    assert format.is_conventional(input)
-
-
-@pytest.mark.parametrize("type", format.CONVENTIONAL_TYPES)
-def test_is_conventional__conventional_type(type):
-    input = f"{type}: message"
-
-    assert format.is_conventional(input)
-
-
-@pytest.mark.parametrize("type", CUSTOM_TYPES)
-def test_is_conventional__custom_type(type):
-    input = f"{type}: message"
-
-    assert format.is_conventional(input, CUSTOM_TYPES)
-
-
-@pytest.mark.parametrize("type", format.CONVENTIONAL_TYPES)
-def test_is_conventional__conventional_custom_type(type):
-    input = f"{type}: message"
-
-    assert format.is_conventional(input, CUSTOM_TYPES)
-
-
-def test_is_conventional__breaking_change():
-    input = "fix!: message"
-
-    assert format.is_conventional(input)
-
-
-def test_is_conventional__with_scope():
-    input = "feat(scope): message"
-
-    assert format.is_conventional(input)
-
-
-def test_is_conventional__body_multiline_body_bad_type():
-    input = """wrong: message
-
-    more_message
-    """
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__bad_body_multiline():
-    input = """feat(scope): message
-    more message
-    """
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__body_multiline():
-    input = """feat(scope): message
-
-    more message
-    """
-
-    assert format.is_conventional(input)
-
-
-def test_is_conventional__bad_body_multiline_paragraphs():
-    input = """feat(scope): message
-    more message
-
-    more body message
-    """
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__comment():
-    input = """feat(scope): message
-# Please enter the commit message for your changes.
-# These are comments usually added by editors, f.ex. with export EDITOR=vim
-"""
-    assert format.is_conventional(input)
-
-
-@pytest.mark.parametrize("char", ['"', "'", "`", "#", "&"])
-def test_is_conventional__body_special_char(char):
-    input = f"feat: message with {char}"
-
-    assert format.is_conventional(input)
-
-
-def test_is_conventional__wrong_type():
-    input = "wrong: message"
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__scope_special_chars():
-    input = "feat(%&*@()): message"
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__space_scope():
-    input = "feat (scope): message"
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__scope_space():
-    input = "feat(scope) : message"
-
-    assert not format.is_conventional(input)
-
-
-def test_is_conventional__scope_not_optional():
-    input = "feat: message"
-
-    assert not format.is_conventional(input, optional_scope=False)
-
-
-def test_is_conventional__scope_not_optional_empty_parenthesis():
-    input = "feat(): message"
-
-    assert not format.is_conventional(input, optional_scope=False)
-
-
-def test_is_conventional__missing_delimiter():
-    input = "feat message"
-
-    assert not format.is_conventional(input)
-
-
 @pytest.mark.parametrize(
-    "input,has_prefix",
+    "input,expected_result",
     [
         ("amend! ", True),
         ("fixup! ", True),
@@ -612,5 +387,328 @@ def test_is_conventional__missing_delimiter():
         ("feat(foo):", False),
     ],
 )
-def test_has_autosquash_prefix(input, has_prefix):
-    assert format.has_autosquash_prefix(input) == has_prefix
+def test_has_autosquash_prefix(commit, input, expected_result):
+    assert commit.has_autosquash_prefix(input) is expected_result
+    assert Commit(input).has_autosquash_prefix() is expected_result
+
+
+@pytest.mark.parametrize(
+    "input,expected_result",
+    [
+        ("Merge branch '2.x.x' into '1.x.x'", True),
+        ("Merge branch 'dev' into 'main'", True),
+        ("nope not a merge commit", False),
+        ("type: subject", False),
+    ],
+)
+def test_is_merge_commit(input, expected_result):
+    commit = Commit(input)
+    assert commit.is_merge() is expected_result
+
+
+def test_r_scope__optional(conventional_commit):
+    regex = re.compile(conventional_commit.r_scope)
+
+    assert regex.match("")
+
+
+def test_r_scope__not_optional(conventional_commit_scope_required):
+    regex = re.compile(conventional_commit_scope_required.r_scope)
+
+    assert not regex.match("")
+    assert not regex.match("scope")
+    assert regex.match("(scope)")
+
+
+def test_r_scope__alphanumeric(conventional_commit_scope_required):
+    regex = re.compile(conventional_commit_scope_required.r_scope)
+
+    assert regex.match("(50m3t41N6)")
+
+
+def test_r_scope__special_chars(conventional_commit_scope_required):
+    regex = re.compile(conventional_commit_scope_required.r_scope)
+
+    assert regex.match("(some-thing)")
+    assert regex.match("(some_thing)")
+    assert regex.match("(some/thing)")
+    assert regex.match("(some thing)")
+    assert regex.match("(some:thing)")
+    assert regex.match("(some,thing)")
+
+
+def test_r_scope__scopes(conventional_commit_scope_required):
+    conventional_commit_scope_required.scopes = ["api", "client"]
+    regex = re.compile(conventional_commit_scope_required.r_scope)
+
+    assert regex.match("(api)")
+    assert regex.match("(client)")
+    assert regex.match("(api, client)")
+    assert regex.match("(api: client)")
+    assert regex.match("(api/client)")
+    assert regex.match("(api-client)")
+    assert not regex.match("(test)")
+    assert not regex.match("(api; client)")
+
+
+def test_r_delim(conventional_commit):
+    regex = re.compile(conventional_commit.r_delim)
+
+    assert regex.match(":")
+    assert not regex.match("")
+
+
+def test_r_delim__optional_breaking_indicator(conventional_commit):
+    regex = re.compile(conventional_commit.r_delim)
+
+    assert regex.match("!:")
+
+
+def test_r_subject__starts_with_space(conventional_commit):
+    regex = re.compile(conventional_commit.r_subject)
+
+    assert not regex.match("something")
+    assert regex.match(" something")
+
+
+def test_r_subject__alphanumeric(conventional_commit):
+    regex = re.compile(conventional_commit.r_subject)
+
+    assert regex.match(" 50m3t41N6")
+
+
+def test_r_subject__special_chars(conventional_commit):
+    regex = re.compile(conventional_commit.r_subject)
+
+    assert regex.match(" some-thing")
+    assert regex.match(" some_thing")
+    assert regex.match(" some/thing")
+    assert regex.match(" some thing")
+
+
+def test_types__default():
+    assert ConventionalCommit().types == ConventionalCommit.DEFAULT_TYPES
+
+
+def test_types__custom():
+    result = ConventionalCommit(types=["custom"])
+
+    assert set(["custom", *ConventionalCommit.CONVENTIONAL_TYPES]) == set(result.types)
+
+
+def test_regex(conventional_commit):
+    regex = conventional_commit.regex
+
+    assert isinstance(regex, re.Pattern)
+    assert "type" in regex.groupindex
+    assert "scope" in regex.groupindex
+    assert "delim" in regex.groupindex
+    assert "subject" in regex.groupindex
+    assert "body" in regex.groupindex
+    assert "multi" in regex.groupindex
+    assert "sep" in regex.groupindex
+
+
+def test_match(conventional_commit):
+    match = conventional_commit.match("test: subject line")
+
+    assert isinstance(match, re.Match)
+    assert match.group("type") == "test"
+    assert match.group("scope") == ""
+    assert match.group("delim") == ":"
+    assert match.group("subject").strip() == "subject line"
+    assert match.group("body") == ""
+
+
+def test_match_multiline(conventional_commit):
+    match = conventional_commit.match(
+        """test(scope): subject line
+
+body copy
+"""
+    )
+    assert isinstance(match, re.Match)
+    assert match.group("type") == "test"
+    assert match.group("scope") == "(scope)"
+    assert match.group("delim") == ":"
+    assert match.group("subject").strip() == "subject line"
+    assert match.group("body").strip() == "body copy"
+
+
+def test_match_invalid_type(conventional_commit):
+    match = conventional_commit.match(
+        """invalid(scope): subject line
+
+body copy
+"""
+    )
+    assert isinstance(match, re.Match)
+    assert match.group("type") is None
+    assert match.group("scope") == ""
+    assert match.group("delim") is None
+    assert match.group("subject") is None
+    assert match.group("body") == ""
+
+
+@pytest.mark.parametrize("type", ConventionalCommit.DEFAULT_TYPES)
+def test_is_valid__default_type(conventional_commit, type):
+    input = f"{type}: message"
+
+    assert conventional_commit.is_valid(input)
+
+
+@pytest.mark.parametrize("type", ConventionalCommit.CONVENTIONAL_TYPES)
+def test_is_valid__conventional_type(conventional_commit, type):
+    input = f"{type}: message"
+
+    assert conventional_commit.is_valid(input)
+
+
+@pytest.mark.parametrize("type", CUSTOM_TYPES)
+def test_is_valid__custom_type(type):
+    input = f"{type}: message"
+    conventional_commits = ConventionalCommit(types=CUSTOM_TYPES)
+
+    assert conventional_commits.is_valid(input)
+
+
+@pytest.mark.parametrize("type", ConventionalCommit.CONVENTIONAL_TYPES)
+def test_is_valid__conventional_custom_type(type):
+    input = f"{type}: message"
+    conventional_commits = ConventionalCommit(types=CUSTOM_TYPES)
+
+    assert conventional_commits.is_valid(input)
+
+
+def test_is_valid__breaking_change(conventional_commit):
+    input = "fix!: message"
+
+    assert conventional_commit.is_valid(input)
+
+
+def test_is_valid__with_scope(conventional_commit):
+    input = "feat(scope): message"
+
+    assert conventional_commit.is_valid(input)
+
+
+def test_is_valid__body_multiline_body_bad_type(conventional_commit):
+    input = """wrong: message
+
+    more_message
+    """
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__bad_body_multiline(conventional_commit):
+    input = """feat(scope): message
+    more message
+    """
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__body_multiline(conventional_commit):
+    input = """feat(scope): message
+
+    more message
+    """
+
+    assert conventional_commit.is_valid(input)
+
+
+def test_is_valid__bad_body_multiline_paragraphs(conventional_commit):
+    input = """feat(scope): message
+    more message
+
+    more body message
+    """
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__comment(conventional_commit):
+    input = """feat(scope): message
+# Please enter the commit message for your changes.
+# These are comments usually added by editors, f.ex. with export EDITOR=vim
+"""
+    assert conventional_commit.is_valid(input)
+
+
+@pytest.mark.parametrize("char", ['"', "'", "`", "#", "&"])
+def test_is_valid__body_special_char(conventional_commit, char):
+    input = f"feat: message with {char}"
+
+    assert conventional_commit.is_valid(input)
+
+
+def test_is_valid__wrong_type(conventional_commit):
+    input = "wrong: message"
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__scope_special_chars(conventional_commit):
+    input = "feat(%&*@()): message"
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__space_scope(conventional_commit):
+    input = "feat (scope): message"
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__scope_space(conventional_commit):
+    input = "feat(scope) : message"
+
+    assert not conventional_commit.is_valid(input)
+
+
+def test_is_valid__scope_not_optional(conventional_commit_scope_required):
+    input = "feat: message"
+
+    assert not conventional_commit_scope_required.is_valid(input)
+
+
+def test_is_valid__scope_not_optional_empty_parenthesis(conventional_commit_scope_required):
+    input = "feat(): message"
+
+    assert not conventional_commit_scope_required.is_valid(input)
+
+
+def test_is_valid__missing_delimiter(conventional_commit):
+    input = "feat message"
+
+    assert not conventional_commit.is_valid(input)
+
+
+@pytest.mark.parametrize(
+    "input,expected_result",
+    [
+        ("feat: subject", True),
+        ("feat(scope): subject", True),
+        (
+            """feat(scope): subject
+
+            extended body
+            """,
+            True,
+        ),
+        ("feat", False),
+        ("feat subject", False),
+        ("feat(scope): ", False),
+        (": subject", False),
+        ("(scope): subject", False),
+        (
+            """feat(scope): subject
+            extended body no newline
+            """,
+            False,
+        ),
+    ],
+)
+def test_is_conventional(input, expected_result):
+    assert is_conventional(input) == expected_result
