@@ -1,7 +1,8 @@
 import argparse
 import sys
 
-from conventional_pre_commit import format, output
+from conventional_pre_commit import output
+from conventional_pre_commit.format import ConventionalCommit
 
 RESULT_SUCCESS = 0
 RESULT_FAIL = 1
@@ -11,7 +12,9 @@ def main(argv=[]):
     parser = argparse.ArgumentParser(
         prog="conventional-pre-commit", description="Check a git commit message for Conventional Commits formatting."
     )
-    parser.add_argument("types", type=str, nargs="*", default=format.DEFAULT_TYPES, help="Optional list of types to support")
+    parser.add_argument(
+        "types", type=str, nargs="*", default=ConventionalCommit.DEFAULT_TYPES, help="Optional list of types to support"
+    )
     parser.add_argument("input", type=str, help="A file containing a git commit message")
     parser.add_argument("--no-color", action="store_false", default=True, dest="color", help="Disable color in output.")
     parser.add_argument(
@@ -62,27 +65,25 @@ def main(argv=[]):
     else:
         scopes = args.scopes
 
+    commit = ConventionalCommit(commit_msg, args.types, args.optional_scope, scopes)
+
     if args.skip_merges:
-        if format.is_merge_commit(commit_msg):
+        if commit.is_merge(commit_msg):
             return RESULT_SUCCESS
 
     if not args.strict:
-        if format.has_autosquash_prefix(commit_msg):
+        if commit.has_autosquash_prefix():
             return RESULT_SUCCESS
 
-    if format.is_conventional(commit_msg, args.types, args.optional_scope, scopes):
+    if commit.is_valid():
         return RESULT_SUCCESS
 
-    print(output.fail(commit_msg, use_color=args.color))
+    print(output.fail(commit, use_color=args.color))
 
     if not args.verbose:
         print(output.verbose_arg(use_color=args.color))
     else:
-        print(
-            output.fail_verbose(
-                commit_msg, types=args.types, optional_scope=args.optional_scope, scopes=scopes, use_color=args.color
-            )
-        )
+        print(output.fail_verbose(commit, use_color=args.color))
 
     return RESULT_FAIL
 
