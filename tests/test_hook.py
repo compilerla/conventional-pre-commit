@@ -85,13 +85,13 @@ def test_main_fail__fixup_commit(fixup_commit_path):
 
 
 def test_main_fail__merge_commit(merge_commit_path):
-    result = main([merge_commit_path])
+    result = main(["--strict", merge_commit_path])
 
     assert result == RESULT_FAIL
 
 
 def test_main_success__merge_commit(merge_commit_path):
-    result = main(["--skip-merges", merge_commit_path])
+    result = main([merge_commit_path])
 
     assert result == RESULT_SUCCESS
 

@@ -24,19 +24,12 @@ def main(argv=[]):
         "--scopes",
         type=str,
         default=None,
-        help="Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)",
-    )
-    parser.add_argument(
-        "--skip-merges",
-        action="store_true",
-        default=False,
-        dest="skip_merges",
-        help="Do not check format for merge commits.",
+        help="List of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client).",
     )
     parser.add_argument(
         "--strict",
         action="store_true",
-        help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.",
+        help="Force commit to strictly follow Conventional Commits formatting. Disallows fixup! and merge commits.",
     )
     parser.add_argument(
         "--verbose",
@@ -67,12 +60,10 @@ def main(argv=[]):
 
     commit = ConventionalCommit(commit_msg, args.types, args.optional_scope, scopes)
 
-    if args.skip_merges:
-        if commit.is_merge(commit_msg):
-            return RESULT_SUCCESS
-
     if not args.strict:
         if commit.has_autosquash_prefix():
+            return RESULT_SUCCESS
+        if commit.is_merge():
             return RESULT_SUCCESS
 
     if commit.is_valid():
