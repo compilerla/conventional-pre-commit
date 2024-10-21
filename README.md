@@ -139,7 +139,7 @@ print(is_conventional("custom: this is a conventional commit", types=["custom"])
 
 ```shell
 $ conventional-pre-commit -h
-usage: conventional-pre-commit [-h] [--no-color] [--force-scope] [--scopes SCOPES] [--strict] [--verbose] [types ...] input
+usage: conventional-pre-commit [-h] [--no-color] [--force-scope] [--scopes SCOPES] [--skip-merges] [--strict] [--verbose] [types ...] input
 
 Check a git commit message for Conventional Commits formatting.
 
@@ -151,9 +151,9 @@ options:
   -h, --help       show this help message and exit
   --no-color       Disable color in output.
   --force-scope    Force commit to have scope defined.
-  --scopes SCOPES  Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)
-  --skip-merges    Do not check format for merge commits.
-  --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
+  --scopes SCOPES  List of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client).
+  --skip-merges    Skip Conventional Commits format check for merge commits. Not compatible with --strict.
+  --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! and merge commits.
   --verbose        Print more verbose error output.
 ```
 
