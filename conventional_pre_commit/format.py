@@ -74,7 +74,7 @@ class Commit:
         See the documentation, please https://git-scm.com/docs/git-merge.
         """
         commit_msg = self.clean(commit_msg)
-        return commit_msg.startswith("Merge branch ")
+        return commit_msg.lower().startswith("merge branch ")
 
 
 class ConventionalCommit(Commit):

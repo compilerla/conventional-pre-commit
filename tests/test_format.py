@@ -396,7 +396,7 @@ def test_has_autosquash_prefix(commit, input, expected_result):
     "input,expected_result",
     [
         ("Merge branch '2.x.x' into '1.x.x'", True),
-        ("Merge branch 'dev' into 'main'", True),
+        ("merge branch 'dev' into 'main'", True),
         ("nope not a merge commit", False),
         ("type: subject", False),
     ],
