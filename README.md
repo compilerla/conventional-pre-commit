@@ -74,9 +74,7 @@ Conventional Commit messages follow a pattern like:
 
 Please correct the following errors:
 
-  - Expected value for 'type' but found none.
-  - Expected value for 'delim' but found none.
-  - Expected value for 'subject' but found none.
+  - Expected value for type from: build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test
 
 Run:
 
@@ -151,9 +149,8 @@ options:
   -h, --help       show this help message and exit
   --no-color       Disable color in output.
   --force-scope    Force commit to have scope defined.
-  --scopes SCOPES  Optional list of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client)
-  --skip-merges    Do not check format for merge commits.
-  --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! style commits.
+  --scopes SCOPES  List of scopes to support. Scopes should be separated by commas with no spaces (e.g. api,client).
+  --strict         Force commit to strictly follow Conventional Commits formatting. Disallows fixup! and merge commits.
   --verbose        Print more verbose error output.
 ```
 
