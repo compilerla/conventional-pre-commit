@@ -15,9 +15,13 @@ Create a blank configuration file at the root of your repo, if needed:
 touch .pre-commit-config.yaml
 ```
 
-Add a new repo entry to your configuration file:
+Add/update `default_install_hook_types` and add a new repo entry in your configuration file:
 
 ```yaml
+default_install_hook_types:
+  - pre-commit
+  - commit-msg
+
 repos:
   # - repo: ...
 
@@ -32,7 +36,7 @@ repos:
 Install the `pre-commit` script:
 
 ```console
-pre-commit install --hook-type commit-msg
+pre-commit install --install-hooks
 ```
 
 Make a (normal) commit :x::
