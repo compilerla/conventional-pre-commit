@@ -87,6 +87,8 @@ def fail_verbose(
             else:
                 lines.append(f"{c.yellow}  - Expected value for {c.restore}{group}{c.yellow} but found none.{c.restore}")
 
+    lines.extend(["", f"Allowed types: {c.blue}{", ".join(types)}{c.restore}"])
+
     lines.extend(
         [
             "",
