@@ -90,6 +90,13 @@ def fail_verbose(
     lines.extend(
         [
             "",
+            f"Allowed types: {c.blue}{", ".join(types)}{c.restore}"
+        ]
+    )
+
+    lines.extend(
+        [
+            "",
             f"{c.yellow}Run:{c.restore}",
             "",
             "    git commit --edit --file=.git/COMMIT_EDITMSG",
