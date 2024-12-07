@@ -1,6 +1,6 @@
 {
   "name": "compilerla/conventional-pre-commit",
-  "dockerComposeFile": ["./compose.yml"],
+  "dockerComposeFile": ["../compose.yml"],
   "service": "dev",
   "runServices": ["dev"],
   "workspaceFolder": "/home/compiler/src",
