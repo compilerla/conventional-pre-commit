@@ -5,10 +5,10 @@
 | Name                                      |    Stmts |     Miss |   Branch |   BrPart |   Cover |   Missing |
 |------------------------------------------ | -------: | -------: | -------: | -------: | ------: | --------: |
 | conventional\_pre\_commit/\_\_init\_\_.py |        5 |        2 |        0 |        0 |     60% |       5-7 |
-| conventional\_pre\_commit/format.py       |       70 |        0 |       12 |        0 |    100% |           |
-| conventional\_pre\_commit/hook.py         |       41 |        1 |       14 |        1 |     96% |        80 |
-| conventional\_pre\_commit/output.py       |       56 |        2 |       12 |        2 |     94% |77->90, 83-84 |
-|                                 **TOTAL** |  **172** |    **5** |   **38** |    **3** | **96%** |           |
+| conventional\_pre\_commit/format.py       |      104 |        0 |       14 |        0 |    100% |           |
+| conventional\_pre\_commit/hook.py         |       45 |        1 |       16 |        1 |     97% |        83 |
+| conventional\_pre\_commit/output.py       |       54 |        2 |       10 |        2 |     94% |68->84, 77-78 |
+|                                 **TOTAL** |  **208** |    **5** |   **40** |    **3** | **97%** |           |
 
 
 ## Setup coverage badge
