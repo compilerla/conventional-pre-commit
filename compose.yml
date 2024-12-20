@@ -1,10 +1,10 @@
 services:
   dev:
     build:
-      context: ..
+      context: .
       dockerfile: .devcontainer/Dockerfile
     entrypoint: []
     command: sleep infinity
     image: compilerla/conventional-pre-commit:dev
     volumes:
-      - ../:/home/compiler/src
+      - ./:/home/compiler/src
