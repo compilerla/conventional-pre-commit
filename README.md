@@ -167,7 +167,7 @@ repos:
     hooks:
       - id: conventional-pre-commit
         stages: [commit-msg]
-        args: [--strict, --force-scope, feat, fix, chore, test, custom]
+        args: [--strict, --force-scope --scopes feat, fix, chore, test, custom]
 ```
 
 **NOTE:** when using as a pre-commit hook, `input` is supplied automatically (with the current commit's message).
