@@ -397,8 +397,16 @@ def test_has_autosquash_prefix(commit, input, expected_result):
     [
         ("Merge branch '2.x.x' into '1.x.x'", True),
         ("merge branch 'dev' into 'main'", True),
+        ("Merge remote-tracking branch 'origin/master'", True),
+        ("Merge pull request #123 from user/feature-branch", True),
+        ("Merge tag 'v1.2.3' into main", True),
+        ("Merge origin/master into develop", True),
+        ("Merge refs/heads/main into develop", True),
         ("nope not a merge commit", False),
         ("type: subject", False),
+        ("fix: merge bug in auth logic", False),
+        ("chore: merged upstream changes", False),
+        ("MergeSort implemented and tested", False),
     ],
 )
 def test_is_merge_commit(input, expected_result):
