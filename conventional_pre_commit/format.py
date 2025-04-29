@@ -70,11 +70,16 @@ class Commit:
 
     def is_merge(self, commit_msg: str = ""):
         """
-        Returns True if input starts with "Merge branch"
-        See the documentation, please https://git-scm.com/docs/git-merge.
+        Returns True if the commit message indicates a merge commit.
+        Matches messages that start with "Merge", including:
+        - Merge branch ...
+        - Merge pull request ...
+        - Merge remote-tracking branch ...
+        - Merge tag ...
+        See https://git-scm.com/docs/git-merge.
         """
         commit_msg = self.clean(commit_msg)
-        return commit_msg.lower().startswith("merge branch ")
+        return bool(re.match(r"^merge\b", commit_msg.lower()))
 
 
 class ConventionalCommit(Commit):
