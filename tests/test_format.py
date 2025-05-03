@@ -459,6 +459,20 @@ def test_r_scope__scopes(conventional_commit_scope_required):
     assert not regex.match("(api; client)")
 
 
+def test_r_scope__scopes_uppercase(conventional_commit_scope_required):
+    conventional_commit_scope_required.scopes = ["api", "client"]
+    regex = re.compile(conventional_commit_scope_required.r_scope)
+
+    assert regex.match("(API)")
+    assert regex.match("(CLIENT)")
+    assert regex.match("(API, CLIENT)")
+    assert regex.match("(API: CLIENT)")
+    assert regex.match("(API/CLIENT)")
+    assert regex.match("(API-CLIENT)")
+    assert not regex.match("(TEST)")
+    assert not regex.match("(API; CLIENT)")
+
+
 def test_r_delim(conventional_commit):
     regex = re.compile(conventional_commit.r_delim)
 
