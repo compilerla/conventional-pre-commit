@@ -459,6 +459,20 @@ def test_r_scope__scopes(conventional_commit_scope_required):
     assert not regex.match("(api; client)")
 
 
+def test_r_scope__scopes_uppercase(conventional_commit_scope_required):
+    conventional_commit_scope_required.scopes = ["api", "client"]
+    regex = re.compile(conventional_commit_scope_required.r_scope)
+
+    assert regex.match("(API)")
+    assert regex.match("(CLIENT)")
+    assert regex.match("(API, CLIENT)")
+    assert regex.match("(API: CLIENT)")
+    assert regex.match("(API/CLIENT)")
+    assert regex.match("(API-CLIENT)")
+    assert not regex.match("(TEST)")
+    assert not regex.match("(API; CLIENT)")
+
+
 def test_r_delim(conventional_commit):
     regex = re.compile(conventional_commit.r_delim)
 
@@ -565,9 +579,23 @@ def test_is_valid__default_type(conventional_commit, type):
     assert conventional_commit.is_valid(input)
 
 
+@pytest.mark.parametrize("type", ConventionalCommit.DEFAULT_TYPES)
+def test_is_valid__default_type_uppercase(conventional_commit, type):
+    input = f"{type.upper()}: message"
+
+    assert conventional_commit.is_valid(input)
+
+
 @pytest.mark.parametrize("type", ConventionalCommit.CONVENTIONAL_TYPES)
 def test_is_valid__conventional_type(conventional_commit, type):
     input = f"{type}: message"
+
+    assert conventional_commit.is_valid(input)
+
+
+@pytest.mark.parametrize("type", ConventionalCommit.CONVENTIONAL_TYPES)
+def test_is_valid__conventional_type_uppercase(conventional_commit, type):
+    input = f"{type.upper()}: message"
 
     assert conventional_commit.is_valid(input)
 
@@ -583,6 +611,14 @@ def test_is_valid__custom_type(type):
 @pytest.mark.parametrize("type", ConventionalCommit.CONVENTIONAL_TYPES)
 def test_is_valid__conventional_custom_type(type):
     input = f"{type}: message"
+    conventional_commits = ConventionalCommit(types=CUSTOM_TYPES)
+
+    assert conventional_commits.is_valid(input)
+
+
+@pytest.mark.parametrize("type", ConventionalCommit.CONVENTIONAL_TYPES)
+def test_is_valid__conventional_custom_type_uppercase(type):
+    input = f"{type.upper()}: message"
     conventional_commits = ConventionalCommit(types=CUSTOM_TYPES)
 
     assert conventional_commits.is_valid(input)

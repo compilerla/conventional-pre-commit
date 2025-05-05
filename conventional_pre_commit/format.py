@@ -121,7 +121,7 @@ class ConventionalCommit(Commit):
     @property
     def r_types(self):
         """Regex str for valid types."""
-        return self._r_or(self.types)
+        return f"(?i:{self._r_or(self.types)})"
 
     @property
     def r_scope(self):
@@ -130,7 +130,7 @@ class ConventionalCommit(Commit):
             scopes = self._r_or(self.scopes)
             escaped_delimiters = list(map(re.escape, [":", ",", "-", "/"]))  # type: ignore
             delimiters_pattern = self._r_or(escaped_delimiters)
-            scope_pattern = rf"\(\s*(?:{scopes})(?:\s*(?:{delimiters_pattern})\s*(?:{scopes}))*\s*\)"
+            scope_pattern = rf"\(\s*(?:(?i:{scopes}))(?:\s*(?:{delimiters_pattern})\s*(?:(?i:{scopes})))*\s*\)"
 
             if self.scope_optional:
                 return f"(?:{scope_pattern})?"
