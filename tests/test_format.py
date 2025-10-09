@@ -560,6 +560,16 @@ body copy
     assert match.group("body").strip() == "body copy"
 
 
+def test_match_dots(conventional_commit):
+    match = conventional_commit.match("""feat(foo.bar): hello world""")
+    assert isinstance(match, re.Match)
+    assert match.group("type") == "feat"
+    assert match.group("scope") == "(foo.bar)"
+    assert match.group("delim") == ":"
+    assert match.group("subject").strip() == "hello world"
+    assert match.group("body").strip() == ""
+
+
 def test_match_invalid_type(conventional_commit):
     match = conventional_commit.match(
         """invalid(scope): subject line
