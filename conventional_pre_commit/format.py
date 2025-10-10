@@ -126,9 +126,9 @@ class ConventionalCommit(Commit):
     @property
     def r_scope(self):
         """Regex str for an optional (scope)."""
+        escaped_delimiters = list(map(re.escape, [":", ",", "-", "/", "."]))  # type: ignore
         if self.scopes:
             scopes = self._r_or(self.scopes)
-            escaped_delimiters = list(map(re.escape, [":", ",", "-", "/"]))  # type: ignore
             delimiters_pattern = self._r_or(escaped_delimiters)
             scope_pattern = rf"\(\s*(?:(?i:{scopes}))(?:\s*(?:{delimiters_pattern})\s*(?:(?i:{scopes})))*\s*\)"
 
@@ -137,10 +137,11 @@ class ConventionalCommit(Commit):
             else:
                 return scope_pattern
 
+        joined_delimiters = "".join(escaped_delimiters)
         if self.scope_optional:
-            return r"(\([\w \/:,-]+\))?"
+            return rf"(\([\w {joined_delimiters}]+\))?"
         else:
-            return r"(\([\w \/:,-]+\))"
+            return rf"(\([\w {joined_delimiters}]+\))"
 
     @property
     def r_delim(self):

@@ -54,6 +54,12 @@ def test_main_success__conventional_utf8(conventional_utf8_commit_path):
     assert result == RESULT_SUCCESS
 
 
+def test_main_success__conventional_commit_with_dots_path(conventional_commit_with_dots_path):
+    result = main([conventional_commit_with_dots_path])
+
+    assert result == RESULT_SUCCESS
+
+
 def test_main_fail__conventional_gbk(conventional_gbk_commit_path):
     result = main([conventional_gbk_commit_path])
 

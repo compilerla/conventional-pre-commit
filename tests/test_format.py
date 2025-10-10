@@ -443,6 +443,7 @@ def test_r_scope__special_chars(conventional_commit_scope_required):
     assert regex.match("(some thing)")
     assert regex.match("(some:thing)")
     assert regex.match("(some,thing)")
+    assert regex.match("(some.thing)")
 
 
 def test_r_scope__scopes(conventional_commit_scope_required):
@@ -455,6 +456,7 @@ def test_r_scope__scopes(conventional_commit_scope_required):
     assert regex.match("(api: client)")
     assert regex.match("(api/client)")
     assert regex.match("(api-client)")
+    assert regex.match("(api.client)")
     assert not regex.match("(test)")
     assert not regex.match("(api; client)")
 
@@ -469,6 +471,7 @@ def test_r_scope__scopes_uppercase(conventional_commit_scope_required):
     assert regex.match("(API: CLIENT)")
     assert regex.match("(API/CLIENT)")
     assert regex.match("(API-CLIENT)")
+    assert regex.match("(API.CLIENT)")
     assert not regex.match("(TEST)")
     assert not regex.match("(API; CLIENT)")
 
@@ -555,6 +558,16 @@ body copy
     assert match.group("delim") == ":"
     assert match.group("subject").strip() == "subject line"
     assert match.group("body").strip() == "body copy"
+
+
+def test_match_dots(conventional_commit):
+    match = conventional_commit.match("""feat(foo.bar): hello world""")
+    assert isinstance(match, re.Match)
+    assert match.group("type") == "feat"
+    assert match.group("scope") == "(foo.bar)"
+    assert match.group("delim") == ":"
+    assert match.group("subject").strip() == "hello world"
+    assert match.group("body").strip() == ""
 
 
 def test_match_invalid_type(conventional_commit):
