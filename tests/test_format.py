@@ -547,12 +547,10 @@ def test_match(conventional_commit):
 
 
 def test_match_multiline(conventional_commit):
-    match = conventional_commit.match(
-        """test(scope): subject line
+    match = conventional_commit.match("""test(scope): subject line
 
 body copy
-"""
-    )
+""")
     assert isinstance(match, re.Match)
     assert match.group("type") == "test"
     assert match.group("scope") == "(scope)"
@@ -572,12 +570,10 @@ def test_match_dots(conventional_commit):
 
 
 def test_match_invalid_type(conventional_commit):
-    match = conventional_commit.match(
-        """invalid(scope): subject line
+    match = conventional_commit.match("""invalid(scope): subject line
 
 body copy
-"""
-    )
+""")
     assert isinstance(match, re.Match)
     assert match.group("type") is None
     assert match.group("scope") == ""
