@@ -444,6 +444,7 @@ def test_r_scope__special_chars(conventional_commit_scope_required):
     assert regex.match("(some:thing)")
     assert regex.match("(some,thing)")
     assert regex.match("(some.thing)")
+    assert regex.match("(some#thing)")
 
 
 def test_r_scope__scopes(conventional_commit_scope_required):
@@ -645,6 +646,12 @@ def test_is_valid__breaking_change(conventional_commit):
 
 def test_is_valid__with_scope(conventional_commit):
     input = "feat(scope): message"
+
+    assert conventional_commit.is_valid(input)
+
+
+def test_is_valid__with_scope_and_hash(conventional_commit):
+    input = "feat(#scope): message"
 
     assert conventional_commit.is_valid(input)
 
