@@ -8,7 +8,7 @@
 | conventional\_pre\_commit/format.py       |      105 |        0 |       14 |        0 |    100% |           |
 | conventional\_pre\_commit/hook.py         |       45 |        1 |       16 |        1 |     97% |        83 |
 | conventional\_pre\_commit/output.py       |       54 |        2 |       10 |        2 |     94% |68->84, 77-78 |
-|                                 **TOTAL** |  **209** |    **5** |   **40** |    **3** | **97%** |           |
+| **TOTAL**                                 |  **209** |    **5** |   **40** |    **3** | **97%** |           |
 
 
 ## Setup coverage badge
