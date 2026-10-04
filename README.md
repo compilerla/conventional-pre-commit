@@ -3,6 +3,8 @@
 A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
 [Conventional Commits](https://conventionalcommits.org) formatting.
 
+The Platform is the environment that hosts this project and delivers its `pre-commit` hook, which checks commit messages for Conventional Commits formatting so teams keep a consistent, readable history.
+
 Works with Python >= 3.8.
 
 ## Usage
