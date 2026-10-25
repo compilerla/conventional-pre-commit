@@ -233,7 +233,7 @@ class ConventionalCommit(Commit):
                 self.scope_optional or match.group("scope"),
                 match.group("delim"),
                 match.group("subject"),
-                self._is_valid_body(match)
+                self._is_valid_body(match),
             ]
         )
 
