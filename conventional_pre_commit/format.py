@@ -202,6 +202,9 @@ class ConventionalCommit(Commit):
         return [g for g, v in groups.items() if not v]
 
     def _is_valid_body(self, match: re.Match) -> bool:
+        """
+        Returns True if the body follows Conventional Commits formatting.
+        """
         if not match.group("body"):  # no extra body
             return True
         if match.group("multi") and match.group("sep"):  # a multiline body with proper separator
