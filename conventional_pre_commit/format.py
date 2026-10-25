@@ -201,7 +201,7 @@ class ConventionalCommit(Commit):
 
         return [g for g, v in groups.items() if not v]
 
-    def _valid_body(self, match: re.Match) -> bool:
+    def _is_valid_body(self, match: re.Match) -> bool:
         if not match.group("body"):  # no extra body
             return True
         if match.group("multi") and match.group("sep"):  # a multiline body with proper separator
@@ -230,7 +230,7 @@ class ConventionalCommit(Commit):
                 self.scope_optional or match.group("scope"),
                 match.group("delim"),
                 match.group("subject"),
-                self._valid_body(match)
+                self._is_valid_body(match)
             ]
         )
 
