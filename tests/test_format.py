@@ -768,6 +768,18 @@ def test_is_valid__missing_delimiter(conventional_commit):
             """,
             False,
         ),
+        (
+            "feat(scope): subject\n\nBreaking change: description\n",
+            False,
+        ),
+        (
+            "feat(scope): subject\n\nBREAKING CHANGE: description\n",
+            True,
+        ),
+        (
+            "feat(scope): subject\n\nBREAKING-CHANGE: description\n",
+            True,
+        ),
     ],
 )
 def test_is_conventional(input, expected_result):

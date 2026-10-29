@@ -156,7 +156,7 @@ class ConventionalCommit(Commit):
     @property
     def r_body(self):
         """Regex str for the body, with multiline support."""
-        return r"(?P<multi>\r?\n(?P<sep>^$\r?\n)?.+)?"
+        return r"(?P<multi>\r?\n(?P<sep>^$\r?\n)?(?P<break>(?i:BREAKING[ -]CHANGE: ))?.+)?"
 
     @property
     def regex(self):
@@ -201,6 +201,19 @@ class ConventionalCommit(Commit):
 
         return [g for g, v in groups.items() if not v]
 
+    def _is_valid_body(self, match: re.Match) -> bool:
+        """
+        Returns True if the body follows Conventional Commits formatting.
+        """
+        if not match.group("body"):  # no extra body
+            return True
+        if match.group("multi") and match.group("sep"):  # a multiline body with proper separator
+            if match.group("break"):
+                return match.group("break").isupper()
+            else:
+                return True
+        return False
+
     def is_valid(self, commit_msg: str = "") -> bool:
         """
         Returns True if commit_msg matches Conventional Commits formatting.
@@ -220,14 +233,7 @@ class ConventionalCommit(Commit):
                 self.scope_optional or match.group("scope"),
                 match.group("delim"),
                 match.group("subject"),
-                any(
-                    [
-                        # no extra body; OR
-                        not match.group("body"),
-                        # a multiline body with proper separator
-                        match.group("multi") and match.group("sep"),
-                    ]
-                ),
+                self._is_valid_body(match),
             ]
         )
 
