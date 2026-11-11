@@ -172,6 +172,9 @@ repos:
 
 **NOTE:** when using as a pre-commit hook, `input` is supplied automatically (with the current commit's message).
 
+**NOTE:** pre-commit passes each item in `args` as a single argument, so an option and its value go in separate items,
+like `[--scopes, api]` (or `[--scopes=api]`), not `[--scopes api]`.
+
 ## Development
 
 `conventional-pre-commit` comes with a [VS Code devcontainer](https://code.visualstudio.com/learn/develop-cloud/containers)

@@ -44,6 +44,14 @@ def main(argv=[]):
 
     try:
         args = parser.parse_args(argv)
+        # pre-commit passes each item in `args` as one argument, so `--scopes api` arrives
+        # as a single string. argparse doesn't see an option in it and takes it as a type.
+        for commit_type in args.types:
+            if commit_type.startswith("-"):
+                parser.error(
+                    f'"{commit_type}" looks like an option and its value in one argument. '
+                    + "Pass them separately, e.g. [--scopes, api] or [--scopes=api]."
+                )
     except SystemExit:
         return RESULT_FAIL
 
