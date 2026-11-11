@@ -78,6 +78,19 @@ def test_main_success__conventional_with_scope(cmd, conventional_commit_with_sco
     assert result == RESULT_SUCCESS
 
 
+def test_main_fail__option_and_value_in_one_arg(conventional_commit_with_scope_path, capsys):
+    result = main(["--force-scope", "--scopes api", conventional_commit_with_scope_path])
+
+    assert result == RESULT_FAIL
+    assert '"--scopes api" looks like an option and its value in one argument' in capsys.readouterr().err
+
+
+def test_main_success__option_and_value_with_equals(conventional_commit_with_scope_path):
+    result = main(["--force-scope", "--scopes=scope", conventional_commit_with_scope_path])
+
+    assert result == RESULT_SUCCESS
+
+
 def test_main_success__fixup_commit(fixup_commit_path):
     result = main([fixup_commit_path])
 
