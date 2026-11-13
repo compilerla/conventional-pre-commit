@@ -22,7 +22,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13", "3.14", "3.15"]
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -44,7 +44,7 @@ jobs:
 
       - name: Coverage comment
         uses: py-cov-action/python-coverage-comment-action@e5fb2218463c3377f3504b0c5b5646ed53da7a2f # v4.5
-        if: github.event_name != 'workflow_call' && matrix.python-version == '3.11'
+        if: github.event_name != 'workflow_call' && matrix.python-version == '3.14'
         with:
           GITHUB_TOKEN: ${{ github.token }}
           MINIMUM_GREEN: 90
