@@ -3,7 +3,7 @@
 A [`pre-commit`](https://pre-commit.com) hook to check commit messages for
 [Conventional Commits](https://conventionalcommits.org) formatting.
 
-Works with Python >= 3.8.
+Works with Python >= 3.11.
 
 ## Usage
 

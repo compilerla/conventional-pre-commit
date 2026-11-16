@@ -3,13 +3,13 @@ name = "conventional_pre_commit"
 dynamic = ["version"]
 description = "A pre-commit hook that checks commit messages for Conventional Commits formatting."
 readme = "README.md"
-license = { file = "LICENSE" }
+license-files = ["LICENSE"]
 classifiers = ["Programming Language :: Python :: 3 :: Only"]
 keywords = ["git", "pre-commit", "conventional-commits"]
 authors = [
     { name = "Compiler LLC", email = "dev@compiler.la" }
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 dependencies = []
 
 [project.urls]
@@ -36,7 +36,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 127
-target-version = ['py311']
+target-version = ['py313']
 include = '\.pyi?$'
 
 [tool.coverage.run]
